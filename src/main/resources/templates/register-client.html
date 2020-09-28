@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/app-styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Title</title>
+</head>
+<body class="text-center" data-gr-c-s-loaded="true">
+<div class="container">
+    <form class="form-signin" th:action="@{/auth/sign-up}" th:object="${signUp}" method="post">
+        <h3>Registration form</h3>
+        <div th:if="${error != null}">
+            <p th:text="#{${error}}">...</p>
+        </div>
+        <div>
+            <input class="form-control" type="text" placeholder="Username" required="" id="username"
+                   th:field="*{username}"/>
+        </div>
+        <div>
+            <input class="form-control" type="password" placeholder="Password" required=""
+                   id="password"
+                   th:field="*{password}"/>
+        </div>
+        <div>
+            <input class="form-control" type="text" placeholder="first name" required=""
+                   id="firstname"
+                   th:field="*{firstName}"/>
+        </div>
+        <div>
+            <input class="form-control" type="text" placeholder="First name ru" required=""
+                   id="firstnameRu"
+                   th:field="*{firstNameRu}"/>
+        </div>
+        <div>
+            <input class="form-control" type="text" placeholder="Middle name" required=""
+                   id="middlename"
+                   th:field="*{middleName}"/>
+        </div>
+        <div>
+            <input class="form-control" type="text" placeholder="Middle name ru" required=""
+                   id="middlenameRu"
+                   th:field="*{middleNameRu}"/>
+        </div>
+        <div>
+            <input class="form-control" type="text" placeholder="Last name En" required="" id="lastname"
+                   th:field="*{lastName}"/>
+
+        </div>
+        <div>
+            <input class="form-control" type="text" placeholder="Last name" required=""
+                   id="lastnameRu"
+                   th:field="*{lastNameRu}"/>
+        </div>
+        <div>
+            <input class="form-control" type="text" placeholder="Passport" required=""
+                   id="passport"
+                   th:field="*{passport}"/>
+        </div>
+        <div>
+            <input class="form-control" type="date" placeholder="Birthday" required=""
+                   id="birthday"
+                   th:value="*{birthday}"
+                   th:field="*{birthday}" pattern="dd-MM-yyyy"/>
+        </div>
+        <div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{sign.up}"></button>
+            <a th:href="@{/auth/login}">Log in</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package ua.polina.smarthousemonitoringsystem.entity;
+package ua.polina.smart_house_monitoring_system.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

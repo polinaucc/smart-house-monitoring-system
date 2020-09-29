@@ -25,6 +25,21 @@ public class SpringSecurityWebAppConfig extends WebSecurityConfigurerAdapter {
 
         httpSecurity
                 .authorizeRequests()
+                .antMatchers("/owner/**")
+                .access("hasAuthority(T(ua.polina.smart_house_monitoring_system.entity.Role).OWNER.getAuthority())");
+
+        httpSecurity
+                .authorizeRequests()
+                .antMatchers("/resident/**")
+                .access("hasAuthority(T(ua.polina.smart_house_monitoring_system.entity.Role).RESIDENT.getAuthority())");
+
+        httpSecurity
+                .authorizeRequests()
+                .antMatchers("/admin/**")
+                .access("hasAuthority(T(ua.polina.smart_house_monitoring_system.entity.Role).ADMIN.getAuthority())");
+
+        httpSecurity
+                .authorizeRequests()
                 .and()
                 .exceptionHandling();
 

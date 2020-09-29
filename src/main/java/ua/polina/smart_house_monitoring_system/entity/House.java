@@ -33,5 +33,5 @@ public class House {
     private List<Room> rooms;
 
     @OneToMany(mappedBy = "house")
-    private List<User> residents;
+    private List<Resident> residents;
 }

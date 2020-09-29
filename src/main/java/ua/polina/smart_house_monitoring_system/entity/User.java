@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,32 +34,8 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
-
-    @Column(name = "first_name_ru")
-    private String firstNameRu;
-
-    @Column(name = "middle_name", nullable = false)
-    private String middleName;
-
-    @Column(name = "middle_name_ru")
-    private String middleNameRu;
-
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
-
-    @Column(name = "last_name_ru")
-    private String lastNameRu;
-
-    @Column(name = "passport", unique = true, nullable = false)
-    private String passport;
-
-    @Column(name = "birthday")
-    private LocalDate birthday;
-
-    @ManyToOne
-    private House house;
+    @OneToOne(mappedBy = "user")
+    private Resident resident;
 
     @Override
     public boolean isAccountNonExpired() {

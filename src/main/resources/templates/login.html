@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/app-styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Log in</title>
+</head>
+<body>
+<div class="container">
+    <form class="form-signin" th:action="@{/auth/login}" method="post">
+        <h3>Login form</h3>
+        <div th:if="${logout}">
+            <div class="alert alert-info" role="alert">Logged out.</div>
+        </div>
+        <div th:if="${error}">
+            <div class="alert alert-danger" role="alert">Invalid
+                credentials!
+            </div>
+        </div>
+        <div>
+            <input class="form-control" type="text" placeholder="Username" required="" id="username" name="username"/>
+        </div>
+        <div>
+            <input class="form-control" type="password" placeholder="Password" required="" id="password" name="password"/>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.log.in}"/>
+        <a th:href="@{/auth/sign-up}">Register</a>
+    </form>
+</div>
+</body>
+</html>

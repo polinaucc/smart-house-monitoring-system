@@ -38,7 +38,7 @@ public class AuthController {
             return "register-client";
         }
         try {
-            System.out.println(signUpDto.getBirthday());
+            System.out.println(signUpDto.getRole());
             userService.saveNewUser(signUpDto);
             return "redirect:/auth/login";
         } catch (Exception ex) {

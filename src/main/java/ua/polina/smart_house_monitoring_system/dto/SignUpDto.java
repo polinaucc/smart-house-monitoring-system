@@ -3,7 +3,6 @@ package ua.polina.smart_house_monitoring_system.dto;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
 
 @Data
@@ -20,4 +19,5 @@ public class SignUpDto {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+    private Boolean role;
 }

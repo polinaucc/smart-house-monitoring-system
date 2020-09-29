@@ -25,7 +25,8 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public User saveNewUser(SignUpDto signUpDto) {
         HashSet<Role> roles = new HashSet<>();
-        roles.add(Role.OWNER);
+        if (signUpDto.getRole()) roles.add(Role.OWNER);
+        else roles.add(Role.RESIDENT);
 
         User user = User.builder()
                 .authorities(roles)
@@ -34,6 +35,7 @@ public class UserServiceImpl implements UserService{
                 .firstName(signUpDto.getFirstName())
                 .firstNameRu(signUpDto.getFirstNameRu())
                 .middleName(signUpDto.getMiddleName())
+                .middleNameRu(signUpDto.getMiddleNameRu())
                 .lastName(signUpDto.getLastName())
                 .lastNameRu(signUpDto.getLastNameRu())
                 .passport(signUpDto.getPassport())

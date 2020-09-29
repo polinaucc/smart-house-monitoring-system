@@ -65,7 +65,11 @@
                    th:field="*{birthday}" pattern="dd-MM-yyyy"/>
         </div>
         <div>
-            <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{sign.up}"></button>
+            <label th:for="${#ids.next('role')}">Is owner</label>
+            <input type="checkbox" name="role" th:field="*{role}">
+        </div>
+        <div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
             <a th:href="@{/auth/login}">Log in</a>
         </div>
     </form>

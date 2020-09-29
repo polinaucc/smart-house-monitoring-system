@@ -2,70 +2,72 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/app-styles.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Title</title>
 </head>
 <body>
+<div>
+    <th:block th:insert="fragments/language :: language"/>
+</div>
 <div class="container">
     <form class="form-signin" th:action="@{/auth/sign-up}" th:object="${signUp}" method="post">
-        <h3>Registration form</h3>
+        <h3 th:text="#{registration.form}">Registration form</h3>
         <div th:if="${error != null}">
             <p th:text="#{${error}}">...</p>
         </div>
         <div>
-            <input class="form-control" type="text" placeholder="Username" required="" id="username"
+            <input class="form-control" type="text"  th:placeholder="#{placeholder.username}" required="" id="username"
                    th:field="*{username}"/>
         </div>
         <div>
-            <input class="form-control" type="password" placeholder="Password" required=""
+            <input class="form-control" type="password" th:placeholder="#{placeholder.password}" required=""
                    id="password"
                    th:field="*{password}"/>
         </div>
         <div>
-            <input class="form-control" type="text" placeholder="first name" required=""
+            <input class="form-control" type="text" th:placeholder="#{placeholder.first.name}" required=""
                    id="firstname"
                    th:field="*{firstName}"/>
         </div>
         <div>
-            <input class="form-control" type="text" placeholder="First name ru" required=""
+            <input class="form-control" type="text" th:placeholder="#{placeholder.first.name.ru}" required=""
                    id="firstnameRu"
                    th:field="*{firstNameRu}"/>
         </div>
         <div>
-            <input class="form-control" type="text" placeholder="Middle name" required=""
+            <input class="form-control" type="text" th:placeholder="#{placeholder.second.name}" required=""
                    id="middlename"
                    th:field="*{middleName}"/>
         </div>
         <div>
-            <input class="form-control" type="text" placeholder="Middle name ru" required=""
+            <input class="form-control" type="text" th:placeholder="#{placeholder.second.name.ru}" required=""
                    id="middlenameRu"
                    th:field="*{middleNameRu}"/>
         </div>
         <div>
-            <input class="form-control" type="text" placeholder="Last name En" required="" id="lastname"
+            <input class="form-control" type="text" th:placeholder="#{placeholder.last.name}" required="" id="lastname"
                    th:field="*{lastName}"/>
 
         </div>
         <div>
-            <input class="form-control" type="text" placeholder="Last name" required=""
+            <input class="form-control" type="text" th:placeholder="#{placeholder.last.name.ru}" required=""
                    id="lastnameRu"
                    th:field="*{lastNameRu}"/>
         </div>
         <div>
-            <input class="form-control" type="text" placeholder="Passport" required=""
+            <input class="form-control" type="text" th:placeholder="#{placeholder.passport}" required=""
                    id="passport"
                    th:field="*{passport}"/>
         </div>
         <div>
-            <input class="form-control" type="date" placeholder="Birthday" required=""
+            <input class="form-control" type="date" th:placeholder="#{placeholder.birthday}" required=""
                    id="birthday"
                    th:value="*{birthday}"
                    th:field="*{birthday}" pattern="dd-MM-yyyy"/>
         </div>
         <div>
-            <label th:for="${#ids.next('role')}">Is owner</label>
+            <label th:text="#{is.owner}" th:for="${#ids.next('role')}">Is owner</label>
             <input type="checkbox" name="role" th:field="*{role}">
         </div>
         <div>

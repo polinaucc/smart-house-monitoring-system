@@ -6,6 +6,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * Entity for user address presentation.
+ *
+ * @author Polina Serhiienko
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

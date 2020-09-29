@@ -5,9 +5,15 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+/**
+ * The type Spring security web app config.
+ */
 @Primary
 @Configuration
 public class SpringSecurityWebAppConfig extends WebSecurityConfigurerAdapter {
+    /**
+     * Instantiates a new Spring security web app config.
+     */
     public SpringSecurityWebAppConfig() {
         super();
     }

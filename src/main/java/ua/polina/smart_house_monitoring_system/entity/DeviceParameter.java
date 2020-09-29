@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * The entity for Device presentation.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

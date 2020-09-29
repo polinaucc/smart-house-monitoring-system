@@ -10,6 +10,9 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The entity for User presentation.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

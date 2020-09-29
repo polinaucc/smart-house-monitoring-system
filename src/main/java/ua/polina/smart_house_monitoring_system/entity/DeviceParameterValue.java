@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * The entity that binds device and its parameters via certain
+ * values.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

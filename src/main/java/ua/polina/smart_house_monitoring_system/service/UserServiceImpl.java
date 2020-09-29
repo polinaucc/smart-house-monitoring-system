@@ -12,12 +12,31 @@ import ua.polina.smart_house_monitoring_system.repository.UserRepository;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 
+/**
+ * The User service implementation
+ */
 @Service
 public class UserServiceImpl implements UserService {
+    /**
+     * The User repository.
+     */
     final UserRepository userRepository;
+    /**
+     * The Resident repository.
+     */
     final ResidentRepository residentRepository;
+    /**
+     * The Password encoder.
+     */
     final PasswordEncoder passwordEncoder;
 
+    /**
+     * Instantiates a new User service.
+     *
+     * @param userRepository     the user repository
+     * @param residentRepository the resident repository
+     * @param passwordEncoder    the password encoder
+     */
     public UserServiceImpl(UserRepository userRepository,
                            ResidentRepository residentRepository,
                            PasswordEncoder passwordEncoder) {
@@ -26,6 +45,12 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Save new user to the database.
+     *
+     * @param signUpDto the sign up dto from registration form
+     * @return the user
+     */
     public User saveNewUser(SignUpDto signUpDto) {
         HashSet<Role> roles = new HashSet<>();
         if (signUpDto.getRole()) roles.add(Role.OWNER);

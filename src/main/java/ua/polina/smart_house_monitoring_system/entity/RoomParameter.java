@@ -2,6 +2,9 @@ package ua.polina.smart_house_monitoring_system.entity;
 
 import javax.persistence.*;
 
+/**
+ * The entity for Room parameter.
+ */
 @Entity
 @Table(name = "room_paramteter")
 public class RoomParameter {

@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalTime;
 
+/**
+ * The entity for device presentation.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

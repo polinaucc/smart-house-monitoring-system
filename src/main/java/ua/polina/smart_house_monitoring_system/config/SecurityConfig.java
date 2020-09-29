@@ -10,15 +10,31 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * Security config.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
+    /**
+     * Encoder password encoder.
+     *
+     * @return the password encoder
+     */
     @Bean
     public static PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Configure global.
+     *
+     * @param auth               the auth
+     * @param userDetailsService the user details service
+     * @param encoder            the encoder
+     * @throws Exception the exception
+     */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth,
                                 UserDetailsService userDetailsService,

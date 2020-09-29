@@ -2,6 +2,9 @@ package ua.polina.smart_house_monitoring_system.entity;
 
 import javax.persistence.*;
 
+/**
+ * The entity that sets up new values for devices in the room.
+ */
 @Entity
 @Table(name = "room_device")
 public class RoomDevice {

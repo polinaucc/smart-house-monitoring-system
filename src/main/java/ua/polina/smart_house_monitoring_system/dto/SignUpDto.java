@@ -5,6 +5,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
+/**
+ * The type Sign up dto for registration object.
+ */
 @Data
 public class SignUpDto {
     private String username;

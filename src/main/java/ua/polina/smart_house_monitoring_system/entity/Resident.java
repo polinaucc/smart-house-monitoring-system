@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * The entity for Resident presentation.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -10,15 +10,36 @@ import ua.polina.smart_house_monitoring_system.entity.Role;
 import ua.polina.smart_house_monitoring_system.service.UserService;
 
 
+/**
+ * Controller for authentication and authorization. It processes requests
+ * for registration and login
+ *
+ * @author Polina Serhiienko
+ */
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
+    /**
+     * The User service. It processes requests about users
+     * from controller to database and vice versa.
+     */
     final UserService userService;
 
+    /**
+     * Instantiates a new Auth controller.
+     *
+     * @param userService the user service
+     */
     public AuthController(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * Gets registration page.
+     *
+     * @param model the model
+     * @return the registration page
+     */
     @GetMapping("/sign-up")
     public String getRegisterPage(Model model) {
         model.addAttribute("signUp", new SignUpDto());
@@ -26,17 +47,22 @@ public class AuthController {
         return "register-client";
     }
 
+    /**
+     * Add resident to database
+     *
+     * @param signUpDto     the sign up dto from form
+     * @param bindingResult the binding result
+     * @param model         the model
+     * @return the page for registration or redirection to login page
+     */
     @PostMapping("/sign-up")
     public String registerUser(@ModelAttribute("signUp") SignUpDto signUpDto,
                                BindingResult bindingResult,
                                Model model) {
         if (bindingResult.hasErrors()) {
-            System.out.println(signUpDto);
-            System.out.println("ERRRRORR");
             return "register-client";
         }
         try {
-            System.out.println(signUpDto.getRole());
             userService.saveNewResident(signUpDto);
             return "redirect:/auth/login";
         } catch (Exception ex) {
@@ -45,6 +71,14 @@ public class AuthController {
         }
     }
 
+    /**
+     * Gets login.
+     *
+     * @param error  the error prameter
+     * @param logout the logout parameter
+     * @param model  the model
+     * @return the login page
+     */
     @RequestMapping("/login")
     public String getLogin(
             @RequestParam(value = "error", required = false) String error,
@@ -55,6 +89,12 @@ public class AuthController {
         return "login";
     }
 
+    /**
+     * Gets success login page.
+     *
+     * @param model the model
+     * @return the success login page
+     */
     @RequestMapping("/default-success")
     public String getSuccessPage(Model model) {
         if (SecurityContextHolder.getContext().getAuthentication()

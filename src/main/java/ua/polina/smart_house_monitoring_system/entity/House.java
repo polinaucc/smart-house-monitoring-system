@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * The entity for house presentation.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

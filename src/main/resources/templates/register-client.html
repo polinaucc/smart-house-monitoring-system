@@ -39,7 +39,7 @@
                    id="firstnameRu"
                    th:field="*{firstNameRu}"/>
         </div>
-        <div class="error" th:if="${#fields.hasErrors('middleName')}" th:errors="*{middleName}">First name Error</div>
+        <div class="error" th:if="${#fields.hasErrors('middleName')}" th:errors="*{middleName}">Middle name Error</div>
         <div>
             <input class="form-control" type="text" th:placeholder="#{placeholder.second.name}" required=""
                    id="middlename"

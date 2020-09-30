@@ -35,7 +35,7 @@ public class SignUpDto {
     private String middleName;
 
     @NotBlank
-    @Pattern(regexp = "(^[А-ЩЮЯЭ][а-я]{5,19})(ович$|евич$|евна$|овна$)",
+    @Pattern(regexp = "(^[А-ЩЮЯЭ][а-я]{3,19})(ович$|евич$|евна$|овна$)",
             message = "{middle.name.ru.error}")
     private String middleNameRu;
 

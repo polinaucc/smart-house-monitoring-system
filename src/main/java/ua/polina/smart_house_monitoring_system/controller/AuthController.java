@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.polina.smart_house_monitoring_system.dto.SignUpDto;
 import ua.polina.smart_house_monitoring_system.entity.Role;
+import ua.polina.smart_house_monitoring_system.exception.DataExistsException;
 import ua.polina.smart_house_monitoring_system.service.UserService;
 
 import javax.validation.Valid;
@@ -67,7 +68,7 @@ public class AuthController {
         try {
             userService.saveNewResident(signUpDto);
             return "redirect:/auth/login";
-        } catch (Exception ex) {
+        } catch (DataExistsException ex) {
             model.addAttribute("error", ex.getMessage());
             return "register-client";
         }

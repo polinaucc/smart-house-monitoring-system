@@ -59,12 +59,11 @@ public class UserServiceImpl implements UserService {
             throw new DataExistsException("username.exists");
         }
         HashSet<Role> roles = new HashSet<>();
-//        if (signUpDto.getRole()) {
-//            roles.add(Role.OWNER);
-//        } else {
-//            roles.add(Role.RESIDENT);
-//        }
-        roles.add(Role.ADMIN);
+        if (signUpDto.getRole()) {
+            roles.add(Role.OWNER);
+        } else {
+            roles.add(Role.RESIDENT);
+        }
 
         User user = User.builder()
                 .authorities(roles)

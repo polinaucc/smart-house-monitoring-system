@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <th:block th:insert="fragments/language :: language"/>
+</div>
+<div class="container">
+    <form class="form-signin" th:action="@{/admin/add-house}" th:object="${houseDto}" method="post">
+        <h3 th:text="#{registration.form}">Registration form</h3>
+        <div th:if="${error != null}">
+            <p th:text="#{${error}}">...</p>
+        </div>
+        <div class="error" th:if="${#fields.hasErrors('country')}" th:errors="*{country}">Country Error</div>
+        <div>
+            <input class="form-control" type="text" th:placeholder="#{placeholder.country}" required="" id="country"
+                   th:field="*{country}"/>
+        </div>
+        <div th:if="${#fields.hasErrors('city')}" th:errors="*{city}">City Error</div>
+        <div>
+            <input class="form-control" type="text" th:placeholder="#{placeholder.city}" required=""
+                   id="city"
+                   th:field="*{city}"/>
+        </div>
+        <div class="error" th:if="${#fields.hasErrors('street')}" th:errors="*{street}">Street Error</div>
+        <div>
+            <input class="form-control" type="text" th:placeholder="#{placeholder.street}" required=""
+                   id="street"
+                   th:field="*{street}"/>
+        </div>
+        <div class="error" th:if="${#fields.hasErrors('houseNumber')}" th:errors="*{houseNumber}">House number Error
+        </div>
+        <div>
+            <input class="form-control" type="text" th:placeholder="#{placeholder.house.number}" required=""
+                   id="houseNumber"
+                   th:field="*{houseNumber}"/>
+        </div>
+        <div class="error" th:if="${#fields.hasErrors('flatNumber')}" th:errors="*{flatNumber}">Flat Number Error</div>
+        <div>
+            <input class="form-control" type="text" th:placeholder="#{placeholder.flat.number}" required=""
+                   id="flatNumber"
+                   th:field="*{flatNumber}"/>
+        </div>
+        <div class="error" th:if="${#fields.hasErrors('size')}" th:errors="*{size}">House size Error
+        </div>
+        <div>
+            <input class="form-control" type="text" th:placeholder="#{placeholder.size}" required=""
+                   id="size"
+                   th:field="*{size}"/>
+        </div>
+        <div class="error" th:if="${#fields.hasErrors('amountOfRooms')}" th:errors="*{amountOfRooms}">Amounts of Rooms
+            Error
+        </div>
+        <div>
+            <input class="form-control" type="text" th:placeholder="#{placeholder.amount.of.rooms}" required=""
+                   id="amount"
+                   th:field="*{amountOfRooms}"/>
+        </div>
+        <div>
+            <button class="btn btn-lg btn-primary btn-block" th:text="#{add.house}" type="submit">Add house</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

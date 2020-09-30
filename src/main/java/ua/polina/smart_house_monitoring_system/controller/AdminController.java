@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ua.polina.smart_house_monitoring_system.dto.HouseDto;
 import ua.polina.smart_house_monitoring_system.dto.SignUpDto;
 import ua.polina.smart_house_monitoring_system.exception.DataExistsException;
+import ua.polina.smart_house_monitoring_system.service.HouseService;
 import ua.polina.smart_house_monitoring_system.service.UserService;
 
 import javax.validation.Valid;
@@ -23,12 +25,21 @@ public class AdminController {
     final UserService userService;
 
     /**
+     * The house service. It processes requests about houses
+     * from controller to database and vice versa.
+     */
+    final HouseService houseService;
+
+    /**
      * Instantiates a new Auth controller.
      *
      * @param userService the user service
+     * @param houseService the house service
      */
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService,
+                           HouseService houseService) {
         this.userService = userService;
+        this.houseService = houseService;
     }
 
     /**
@@ -65,6 +76,29 @@ public class AdminController {
         } catch (DataExistsException ex) {
             model.addAttribute("error", ex.getMessage());
             return "register-client";
+        }
+    }
+
+    @GetMapping("/add-house")
+    public String getHousePage(Model model) {
+        model.addAttribute("houseDto", new HouseDto());
+        model.addAttribute("error", null);
+        return "admin/add-house";
+    }
+
+    @PostMapping("/add-house")
+    public String addHouse(@Valid @ModelAttribute("houseDto") HouseDto houseDto,
+                           BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            return "admin/add-house";
+        }
+        try {
+            houseService.addNewHouse(houseDto);
+            //TODO: redirect to the page with room adding
+            return "redirect:/admin/houses";
+        }
+        catch (DataExistsException ex){
+            return "admin/add-house";
         }
     }
 

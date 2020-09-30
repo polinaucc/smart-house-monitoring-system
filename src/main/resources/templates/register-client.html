@@ -11,7 +11,7 @@
     <th:block th:insert="fragments/language :: language"/>
 </div>
 <div class="container">
-    <form class="form-signin" th:action="@{/auth/sign-up}" th:object="${signUp}" method="post">
+    <form class="form-signin" th:action="@{/admin/sign-up}" th:object="${signUp}" method="post">
         <h3 th:text="#{registration.form}">Registration form</h3>
         <div th:if="${error != null}">
             <p th:text="#{${error}}">...</p>

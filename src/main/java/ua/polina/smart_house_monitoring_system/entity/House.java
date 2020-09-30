@@ -1,6 +1,7 @@
 package ua.polina.smart_house_monitoring_system.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 
 @Entity
 @Table(name = "house")
@@ -23,7 +25,7 @@ public class House {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "house")
+    @JoinColumn(name = "address", unique = true)
     private Address address;
 
     @Column(name = "size")

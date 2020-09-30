@@ -27,7 +27,8 @@ public class User implements UserDetails {
     private Long id;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> authorities = new HashSet<>();
 
@@ -40,21 +41,42 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user")
     private Resident resident;
 
+    /**
+     * Indicates whether the user's account has expired.
+     *
+     * @return true - he user's account is valid (ie non-expired)
+     */
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    /**
+     * Indicates whether the user is locked or unlocked.
+     *
+     * @return true - the user is not locked
+     */
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    /**
+     * Indicates whether the user's credentials (password) has expired.
+     *
+     * @return true - the user's credentials ara valid, non-expired.
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+
+    /**
+     * Indicates whether the user is enabled or disabled.
+     *
+     * @return true - the user is enabled
+     */
     @Override
     public boolean isEnabled() {
         return true;

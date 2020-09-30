@@ -18,6 +18,12 @@ public class SpringSecurityWebAppConfig extends WebSecurityConfigurerAdapter {
         super();
     }
 
+    /**
+     * Configurers the HttpSecurity.
+     *
+     * @param httpSecurity the HttpSecurity to modify
+     * @throws Exception if an error occurs
+     */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -32,17 +38,26 @@ public class SpringSecurityWebAppConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .authorizeRequests()
                 .antMatchers("/owner/**")
-                .access("hasAuthority(T(ua.polina.smart_house_monitoring_system.entity.Role).OWNER.getAuthority())");
+                .access(
+                        "hasAuthority(T(ua.polina"
+                                + ".smart_house_monitoring_system.entity.Role)"
+                                + ".OWNER.getAuthority())");
 
         httpSecurity
                 .authorizeRequests()
                 .antMatchers("/resident/**")
-                .access("hasAuthority(T(ua.polina.smart_house_monitoring_system.entity.Role).RESIDENT.getAuthority())");
+                .access(
+                        "hasAuthority(T(ua.polina"
+                                + ".smart_house_monitoring_system.entity.Role)"
+                                + ".RESIDENT.getAuthority())");
 
         httpSecurity
                 .authorizeRequests()
                 .antMatchers("/admin/**")
-                .access("hasAuthority(T(ua.polina.smart_house_monitoring_system.entity.Role).ADMIN.getAuthority())");
+                .access(
+                        "hasAuthority(T(ua.polina"
+                                + ".smart_house_monitoring_system.entity.Role)"
+                                + ".ADMIN.getAuthority())");
 
         httpSecurity
                 .authorizeRequests()

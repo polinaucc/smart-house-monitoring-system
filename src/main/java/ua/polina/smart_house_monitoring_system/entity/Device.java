@@ -28,8 +28,8 @@ public class Device {
     private State state;
 
     @Column(name = "on_time")
-    private LocalTime on_time;
+    private LocalTime onTime;
 
     @Column(name = "off_time")
-    private LocalTime off_time;
+    private LocalTime offTime;
 }

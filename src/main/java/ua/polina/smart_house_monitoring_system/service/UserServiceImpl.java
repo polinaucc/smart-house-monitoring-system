@@ -13,22 +13,22 @@ import javax.transaction.Transactional;
 import java.util.HashSet;
 
 /**
- * The User service implementation
+ * The User service implementation.
  */
 @Service
 public class UserServiceImpl implements UserService {
     /**
      * The User repository.
      */
-    final UserRepository userRepository;
+    private final UserRepository userRepository;
     /**
      * The Resident repository.
      */
-    final ResidentRepository residentRepository;
+    private final ResidentRepository residentRepository;
     /**
      * The Password encoder.
      */
-    final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Instantiates a new User service.
@@ -46,15 +46,18 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Save new user to the database.
+     * Save new user to the database with information from registration form.
      *
      * @param signUpDto the sign up dto from registration form
      * @return the user
      */
-    public User saveNewUser(SignUpDto signUpDto) {
+    public User saveNewUser(final SignUpDto signUpDto) {
         HashSet<Role> roles = new HashSet<>();
-        if (signUpDto.getRole()) roles.add(Role.OWNER);
-        else roles.add(Role.RESIDENT);
+        if (signUpDto.getRole()) {
+            roles.add(Role.OWNER);
+        } else {
+            roles.add(Role.RESIDENT);
+        }
 
         User user = User.builder()
                 .authorities(roles)
@@ -65,6 +68,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * Adds to database information about the resident if the user is
+     * successfully saved.
+     *
+     * @param signUpDto the sign up dto
+     * @return
+     */
     @Override
     @Transactional
     public Resident saveNewResident(SignUpDto signUpDto) {

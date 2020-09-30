@@ -14,9 +14,9 @@ import java.util.Locale;
  * Configuration for internationalization.
  */
 @Configuration
-public class i18Config implements WebMvcConfigurer {
+public class I18Config implements WebMvcConfigurer {
     /**
-     * Locale resolver
+     * Locale resolver.
      *
      * @return the locale resolver
      */
@@ -29,18 +29,25 @@ public class i18Config implements WebMvcConfigurer {
     }
 
     /**
-     * Locale change interceptor
+     * Locale change interceptor.
      *
      * @return the locale change interceptor
      */
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
-        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        LocaleChangeInterceptor localeChangeInterceptor =
+                new LocaleChangeInterceptor();
 
         localeChangeInterceptor.setParamName("lang");
         return localeChangeInterceptor;
     }
 
+    /**
+     * Add Spring MVC lifecycle interceptors for pre- and post-processing of
+     * controller method invocations and resource handler requests.
+     *
+     * @param registry
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());

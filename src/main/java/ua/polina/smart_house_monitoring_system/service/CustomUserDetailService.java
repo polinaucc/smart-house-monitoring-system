@@ -16,7 +16,7 @@ public class CustomUserDetailService implements UserDetailsService {
     /**
      * The User repository.
      */
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     /**
      * Instantiates a new Custom user detail service.
@@ -28,13 +28,15 @@ public class CustomUserDetailService implements UserDetailsService {
     }
 
     /**
-     * The method to find user in database by his/her username
+     * The method to find user in database by his/her username.
+     *
      * @param username username
      * @return userDetails
      * @throws UsernameNotFoundException
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
     }

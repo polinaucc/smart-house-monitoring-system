@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package ua.polina.smart_house_monitoring_system.entity;
 
 import lombok.AllArgsConstructor;

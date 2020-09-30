@@ -23,7 +23,7 @@ public class House {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name="house")
+    @JoinColumn(name = "house")
     private Address address;
 
     @Column(name = "size")

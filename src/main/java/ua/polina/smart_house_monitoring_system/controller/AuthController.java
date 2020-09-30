@@ -3,14 +3,9 @@ package ua.polina.smart_house_monitoring_system.controller;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import ua.polina.smart_house_monitoring_system.dto.SignUpDto;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ua.polina.smart_house_monitoring_system.entity.Role;
-import ua.polina.smart_house_monitoring_system.exception.DataExistsException;
-import ua.polina.smart_house_monitoring_system.service.UserService;
-
-import javax.validation.Valid;
 
 
 /**
@@ -23,61 +18,9 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 public class AuthController {
     /**
-     * The User service. It processes requests about users
-     * from controller to database and vice versa.
-     */
-    final UserService userService;
-
-    /**
-     * Instantiates a new Auth controller.
-     *
-     * @param userService the user service
-     */
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
-
-    /**
-     * Gets registration page.
-     *
-     * @param model the model
-     * @return the registration page
-     */
-    @GetMapping("/sign-up")
-    public String getRegisterPage(Model model) {
-        model.addAttribute("signUp", new SignUpDto());
-        model.addAttribute("error", null);
-        return "register-client";
-    }
-
-    /**
-     * Add resident to database
-     *
-     * @param signUpDto     the sign up dto from form
-     * @param bindingResult the binding result
-     * @param model         the model
-     * @return the page for registration or redirection to login page
-     */
-    @PostMapping("/sign-up")
-    public String registerUser(@Valid @ModelAttribute("signUp") SignUpDto signUpDto,
-                               BindingResult bindingResult,
-                               Model model) {
-        if (bindingResult.hasErrors()) {
-            return "register-client";
-        }
-        try {
-            userService.saveNewResident(signUpDto);
-            return "redirect:/auth/login";
-        } catch (DataExistsException ex) {
-            model.addAttribute("error", ex.getMessage());
-            return "register-client";
-        }
-    }
-
-    /**
      * Gets login.
      *
-     * @param error  the error prameter
+     * @param error  the error parameter
      * @param logout the logout parameter
      * @param model  the model
      * @return the login page

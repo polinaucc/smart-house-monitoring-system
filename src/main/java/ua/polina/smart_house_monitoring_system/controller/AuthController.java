@@ -9,6 +9,8 @@ import ua.polina.smart_house_monitoring_system.dto.SignUpDto;
 import ua.polina.smart_house_monitoring_system.entity.Role;
 import ua.polina.smart_house_monitoring_system.service.UserService;
 
+import javax.validation.Valid;
+
 
 /**
  * Controller for authentication and authorization. It processes requests
@@ -56,7 +58,7 @@ public class AuthController {
      * @return the page for registration or redirection to login page
      */
     @PostMapping("/sign-up")
-    public String registerUser(@ModelAttribute("signUp") SignUpDto signUpDto,
+    public String registerUser(@Valid @ModelAttribute("signUp") SignUpDto signUpDto,
                                BindingResult bindingResult,
                                Model model) {
         if (bindingResult.hasErrors()) {

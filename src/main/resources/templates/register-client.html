@@ -16,50 +16,61 @@
         <div th:if="${error != null}">
             <p th:text="#{${error}}">...</p>
         </div>
+        <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
         <div>
-            <input class="form-control" type="text"  th:placeholder="#{placeholder.username}" required="" id="username"
+            <input class="form-control" type="text" th:placeholder="#{placeholder.username}" required="" id="username"
                    th:field="*{username}"/>
         </div>
+        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
         <div>
             <input class="form-control" type="password" th:placeholder="#{placeholder.password}" required=""
                    id="password"
                    th:field="*{password}"/>
         </div>
+        <div class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name Error</div>
         <div>
             <input class="form-control" type="text" th:placeholder="#{placeholder.first.name}" required=""
                    id="firstname"
                    th:field="*{firstName}"/>
         </div>
+        <div class="error" th:if="${#fields.hasErrors('firstNameRu')}" th:errors="*{firstNameRu}">First name Error</div>
         <div>
             <input class="form-control" type="text" th:placeholder="#{placeholder.first.name.ru}" required=""
                    id="firstnameRu"
                    th:field="*{firstNameRu}"/>
         </div>
+        <div class="error" th:if="${#fields.hasErrors('middleName')}" th:errors="*{middleName}">First name Error</div>
         <div>
             <input class="form-control" type="text" th:placeholder="#{placeholder.second.name}" required=""
                    id="middlename"
                    th:field="*{middleName}"/>
+        </div>
+        <div class="error" th:if="${#fields.hasErrors('middleNameRu')}" th:errors="*{middleNameRu}">Middle name Error
         </div>
         <div>
             <input class="form-control" type="text" th:placeholder="#{placeholder.second.name.ru}" required=""
                    id="middlenameRu"
                    th:field="*{middleNameRu}"/>
         </div>
+        <div class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name Error</div>
         <div>
             <input class="form-control" type="text" th:placeholder="#{placeholder.last.name}" required="" id="lastname"
                    th:field="*{lastName}"/>
-
+        </div>
+        <div class="error" th:if="${#fields.hasErrors('lastNameRu')}" th:errors="*{lastNameRu}">Last name Error
         </div>
         <div>
             <input class="form-control" type="text" th:placeholder="#{placeholder.last.name.ru}" required=""
                    id="lastnameRu"
                    th:field="*{lastNameRu}"/>
         </div>
+        <div class="error" th:if="${#fields.hasErrors('passport')}" th:errors="*{passport}">Passport Error</div>
         <div>
             <input class="form-control" type="text" th:placeholder="#{placeholder.passport}" required=""
                    id="passport"
                    th:field="*{passport}"/>
         </div>
+        <div class="error" th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}">Birthday Error</div>
         <div>
             <input class="form-control" type="date" th:placeholder="#{placeholder.birthday}" required=""
                    id="birthday"
@@ -71,8 +82,8 @@
             <input type="checkbox" name="role" th:field="*{role}">
         </div>
         <div>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
-            <a th:href="@{/auth/login}">Log in</a>
+            <button class="btn btn-lg btn-primary btn-block" th:text="#{sign.up}" type="submit">Sign Up</button>
+            <a th:href="@{/auth/login}" th:text="#{login.log.in}">Log in</a>
         </div>
     </form>
 </div>

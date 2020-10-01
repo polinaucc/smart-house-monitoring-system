@@ -29,7 +29,7 @@ public class HouseDto {
     private String flatNumber;
 
     @Min(value = 10, message = "{size.error}")
-    private Long size;
+    private Double size;
 
     @Min(1)
     private Integer amountOfRooms;

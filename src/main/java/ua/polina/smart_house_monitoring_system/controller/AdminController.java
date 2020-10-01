@@ -3,15 +3,15 @@ package ua.polina.smart_house_monitoring_system.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ua.polina.smart_house_monitoring_system.dto.HouseDto;
+import ua.polina.smart_house_monitoring_system.dto.RoomDto;
 import ua.polina.smart_house_monitoring_system.dto.SignUpDto;
 import ua.polina.smart_house_monitoring_system.entity.House;
+import ua.polina.smart_house_monitoring_system.entity.Room;
 import ua.polina.smart_house_monitoring_system.exception.DataExistsException;
 import ua.polina.smart_house_monitoring_system.service.HouseService;
+import ua.polina.smart_house_monitoring_system.service.RoomService;
 import ua.polina.smart_house_monitoring_system.service.UserService;
 
 import javax.validation.Valid;
@@ -21,6 +21,7 @@ import java.util.List;
  * Controller which processes admin requests.
  */
 @Controller
+@SessionAttributes("house")
 @RequestMapping("/admin/")
 public class AdminController {
     /**
@@ -36,15 +37,24 @@ public class AdminController {
     private final HouseService houseService;
 
     /**
+     * The room service. It processes requests about rooms
+     * from controller to database and vice versa.
+     */
+    private final RoomService roomService;
+
+    /**
      * Instantiates a new Auth controller.
      *
      * @param userService  the user service
      * @param houseService the house service
+     * @param roomService  the room service
      */
     public AdminController(UserService userService,
-                           HouseService houseService) {
+                           HouseService houseService,
+                           RoomService roomService) {
         this.userService = userService;
         this.houseService = houseService;
+        this.roomService = roomService;
     }
 
     /**
@@ -129,10 +139,41 @@ public class AdminController {
      * @return the page
      */
     @GetMapping("/houses")
-    public String getHouses(Model model){
+    public String getHouses(Model model) {
         List<House> houses = houseService.getAllHouses();
         model.addAttribute("houses", houses);
         return "admin/houses";
+    }
+
+    @GetMapping("rooms/{id}")
+    public String getRooms(@PathVariable("id") Long houseId, Model model) {
+        try {
+            House house = houseService.getById(houseId);
+            List<Room> roomsInHouse = roomService.getRoomsByHouse(house);
+            //TODO: add exception if roomsInHouse list is empty
+            model.addAttribute("rooms", roomsInHouse);
+            model.addAttribute("house", house);
+            return "admin/rooms";
+        } catch (IllegalArgumentException ex) {
+            model.addAttribute("error", ex.getMessage());
+            return "admin/rooms";
+        }
+    }
+
+    @GetMapping("/add-room")
+    public String getRoomForm(Model model){
+        model.addAttribute("roomDto", new RoomDto());
+        return "admin/add-room";
+    }
+
+    @PostMapping("/add-room")
+    public String addRoom(@Valid @ModelAttribute("roomDto") RoomDto roomDto,
+                          @ModelAttribute("house") House house, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            return "/admin/add-room";
+        }
+        roomService.saveRoom(roomDto, house);
+        return "redirect:/admin/rooms/" + house.getId();
     }
 
     /**

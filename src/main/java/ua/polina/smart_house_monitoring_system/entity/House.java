@@ -29,7 +29,7 @@ public class House {
     private Address address;
 
     @Column(name = "size")
-    private Long size;
+    private Double size;
 
     @Column(name = "amount_of_rooms")
     private Integer amountOfRooms;

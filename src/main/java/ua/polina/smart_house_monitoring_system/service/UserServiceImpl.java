@@ -1,5 +1,6 @@
 package ua.polina.smart_house_monitoring_system.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.polina.smart_house_monitoring_system.dto.SignUpDto;
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
      * @param residentRepository the resident repository
      * @param passwordEncoder    the password encoder
      */
+    @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            ResidentRepository residentRepository,
                            PasswordEncoder passwordEncoder) {

@@ -40,11 +40,14 @@
         <td th:text="${house.address.street}"></td>
         <td th:text="${house.address.houseNumber}"></td>
         <td th:text="${house.address.flatNumber}"></td>
+        <td>
+            <a th:href="@{/admin/rooms/{id}(id=${house.id})}"
+               th:text="#{rooms}">Rooms</a>
+        </td>
     </tr>
     </tbody>
 </table>
-
-<div class="name">
+<div>
     <a th:href="@{/admin/index}" th:text="#{home}"></a>
 </div>
 </body>

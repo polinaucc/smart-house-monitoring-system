@@ -1,6 +1,7 @@
 package ua.polina.smart_house_monitoring_system.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 
 @Entity
 @Table(name = "room")
@@ -25,7 +27,7 @@ public class Room {
     private String name;
 
     @Column(name = "size")
-    private Long size;
+    private Double size;
 
     @ManyToOne
     @JoinColumn(name = "house_id")

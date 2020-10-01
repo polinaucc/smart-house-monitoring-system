@@ -91,4 +91,10 @@ public class HouseServiceImpl implements HouseService {
     public List<House> getAllHouses(){
         return houseRepository.findAll();
     }
+
+    @Override
+    public House getById(Long id){
+       return houseRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("No house with such id"));
+    }
 }

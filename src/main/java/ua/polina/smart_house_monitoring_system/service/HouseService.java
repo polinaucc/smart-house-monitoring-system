@@ -8,4 +8,5 @@ import java.util.List;
 public interface HouseService {
     House addNewHouse(HouseDto houseDto);
     List<House> getAllHouses();
+    House getById(Long id);
 }

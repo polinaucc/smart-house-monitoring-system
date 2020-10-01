@@ -15,6 +15,9 @@ import ua.polina.smart_house_monitoring_system.service.UserService;
 
 import javax.validation.Valid;
 
+/**
+ * Controller which processes admin requests.
+ */
 @Controller
 @RequestMapping("/admin/")
 public class AdminController {
@@ -22,18 +25,18 @@ public class AdminController {
      * The User service. It processes requests about users
      * from controller to database and vice versa.
      */
-    final UserService userService;
+    private final UserService userService;
 
     /**
      * The house service. It processes requests about houses
      * from controller to database and vice versa.
      */
-    final HouseService houseService;
+    private final HouseService houseService;
 
     /**
      * Instantiates a new Auth controller.
      *
-     * @param userService the user service
+     * @param userService  the user service
      * @param houseService the house service
      */
     public AdminController(UserService userService,
@@ -56,7 +59,7 @@ public class AdminController {
     }
 
     /**
-     * Add resident to database
+     * Adds resident to database.
      *
      * @param signUpDto     the sign up dto from form
      * @param bindingResult the binding result
@@ -79,6 +82,12 @@ public class AdminController {
         }
     }
 
+    /**
+     * Gets the page with the form for house adding.
+     *
+     * @param model the model
+     * @return the page with the form for house adding
+     */
     @GetMapping("/add-house")
     public String getHousePage(Model model) {
         model.addAttribute("houseDto", new HouseDto());
@@ -86,22 +95,36 @@ public class AdminController {
         return "admin/add-house";
     }
 
+    /**
+     * Adds house to database.
+     *
+     * @param houseDto      the house dto with information from the form
+     * @param bindingResult the binding result
+     * @param model         the model
+     * @return the page for house adding, if the binding result has errors
+     * otherwise redirection to the page for room adding
+     */
     @PostMapping("/add-house")
     public String addHouse(@Valid @ModelAttribute("houseDto") HouseDto houseDto,
-                           BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
+                           BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
             return "admin/add-house";
         }
         try {
             houseService.addNewHouse(houseDto);
             //TODO: redirect to the page with room adding
             return "redirect:/admin/houses";
-        }
-        catch (DataExistsException ex){
+        } catch (DataExistsException ex) {
+            model.addAttribute("error", ex.getMessage());
             return "admin/add-house";
         }
     }
 
+    /**
+     * Gets index page with functions for admin.
+     *
+     * @return the page
+     */
     @GetMapping("/index")
     public String getIndexPage() {
         return "index";

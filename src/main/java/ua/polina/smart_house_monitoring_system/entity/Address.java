@@ -19,7 +19,10 @@ import javax.persistence.*;
 @Builder
 
 @Entity
-@Table(name = "address")
+@Table(name = "address", uniqueConstraints =
+@UniqueConstraint(columnNames = {
+        "country", "city", "street", "house_number", "flat_number"})
+)
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

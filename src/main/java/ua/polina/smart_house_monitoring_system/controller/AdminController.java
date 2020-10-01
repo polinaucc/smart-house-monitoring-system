@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.polina.smart_house_monitoring_system.dto.HouseDto;
 import ua.polina.smart_house_monitoring_system.dto.SignUpDto;
+import ua.polina.smart_house_monitoring_system.entity.House;
 import ua.polina.smart_house_monitoring_system.exception.DataExistsException;
 import ua.polina.smart_house_monitoring_system.service.HouseService;
 import ua.polina.smart_house_monitoring_system.service.UserService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Controller which processes admin requests.
@@ -118,6 +120,19 @@ public class AdminController {
             model.addAttribute("error", ex.getMessage());
             return "admin/add-house";
         }
+    }
+
+    /**
+     * Gets all house in the system
+     *
+     * @param model the model
+     * @return the page
+     */
+    @GetMapping("/houses")
+    public String getHouses(Model model){
+        List<House> houses = houseService.getAllHouses();
+        model.addAttribute("houses", houses);
+        return "admin/houses";
     }
 
     /**

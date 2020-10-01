@@ -10,6 +10,7 @@ import ua.polina.smart_house_monitoring_system.repository.AddressRepository;
 import ua.polina.smart_house_monitoring_system.repository.HouseRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * The House service implementation.
@@ -66,6 +67,7 @@ public class HouseServiceImpl implements HouseService {
      * @throws DataExistsException if the address with entered parameters
      *                             already exists in database
      */
+    //TODO: add exception catching without exists method
     private Address saveAddress(HouseDto houseDto) {
         Address address = Address.builder()
                 .country(houseDto.getCountry())
@@ -84,5 +86,9 @@ public class HouseServiceImpl implements HouseService {
         }
         return addressRepository.save(address);
     }
-    //TODO: add exception catching without exists method
+
+    @Override
+    public List<House> getAllHouses(){
+        return houseRepository.findAll();
+    }
 }

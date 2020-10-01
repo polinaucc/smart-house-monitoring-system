@@ -30,6 +30,9 @@ public class RoomServiceImpl implements RoomService {
                 .size(roomDto.getSize())
                 .house(house)
                 .build();
+        if(house.getAmountOfRooms().equals(roomRepository.countRoomsByHouse(house))){
+            throw new IllegalArgumentException("max.amount.of.rooms");
+        }
         return roomRepository.save(room);
     }
 }

@@ -172,8 +172,13 @@ public class AdminController {
         if(bindingResult.hasErrors()){
             return "/admin/add-room";
         }
-        roomService.saveRoom(roomDto, house);
-        return "redirect:/admin/rooms/" + house.getId();
+        try {
+            roomService.saveRoom(roomDto, house);
+            return "redirect:/admin/rooms/" + house.getId();
+        } catch (IllegalArgumentException e){
+            model.addAttribute("error", e.getMessage());
+            return "/admin/add-room";
+        }
     }
 
     /**

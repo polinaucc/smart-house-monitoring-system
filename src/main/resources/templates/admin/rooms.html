@@ -18,6 +18,9 @@
     <p th:text="${error}">...</p>
 </div>
 <table class="table table-hover">
+    <div th:if="${error != null}">
+        <p th:text="#{${error}}">...</p>
+    </div>
     <thead>
     <tr>
         <th th:text="#{room.id}">House id</th>

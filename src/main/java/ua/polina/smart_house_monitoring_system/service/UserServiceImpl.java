@@ -21,15 +21,15 @@ public class UserServiceImpl implements UserService {
     /**
      * The User repository.
      */
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
     /**
      * The Resident repository.
      */
-    private final ResidentRepository residentRepository;
+    private ResidentRepository residentRepository;
     /**
      * The Password encoder.
      */
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     /**
      * Instantiates a new User service.

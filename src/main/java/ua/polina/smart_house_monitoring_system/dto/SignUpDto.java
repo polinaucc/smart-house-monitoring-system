@@ -1,6 +1,9 @@
 package ua.polina.smart_house_monitoring_system.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
@@ -13,6 +16,9 @@ import java.time.LocalDate;
  * The type Sign up dto for registration object.
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SignUpDto {
     @NotBlank
     @Size(min = 5, max = 40, message = "{username.error}")

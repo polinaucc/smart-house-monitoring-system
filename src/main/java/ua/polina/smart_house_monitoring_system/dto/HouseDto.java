@@ -12,8 +12,6 @@ import javax.validation.constraints.Pattern;
 @Data
 public class HouseDto {
     @NotBlank
-    @Pattern(regexp = "^[А-Я][а-я]{3,14}$",
-            message = "{country.city.street.error}")
     private String country;
 
     @NotBlank
@@ -36,8 +34,9 @@ public class HouseDto {
             message = "{house.flat.number.error}")
     private String flatNumber;
 
-    @Min(value = 10, message = "{size.error}")
-    private Double size;
+    //TODO: delete comment
+//    @Min(value = 10, message = "{size.error}")
+//    private Double size;
 
     @Min(1)
     private Integer amountOfRooms;

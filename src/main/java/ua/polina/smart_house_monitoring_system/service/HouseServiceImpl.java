@@ -53,7 +53,6 @@ public class HouseServiceImpl implements HouseService {
         House house = House.builder()
                 .address(address)
                 .amountOfRooms(houseDto.getAmountOfRooms())
-                .size(houseDto.getSize())
                 .build();
 
         return houseRepository.save(house);
@@ -110,4 +109,11 @@ public class HouseServiceImpl implements HouseService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "no.house.with.id"));
     }
+
+    @Override
+    public House updateSize(House house, Double newSize) {
+        house.setSize(newSize);
+        return houseRepository.save(house);
+    }
+
 }

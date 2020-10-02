@@ -39,4 +39,13 @@ public class House {
 
     @OneToMany(mappedBy = "house")
     private List<Resident> residents;
+
+    @Override
+    public String toString() {
+        return "House{" +
+                "id=" + id +
+                ", size=" + size +
+                ", amountOfRooms=" + amountOfRooms +
+                '}';
+    }
 }

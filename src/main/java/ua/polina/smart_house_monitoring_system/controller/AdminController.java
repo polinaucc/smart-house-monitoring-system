@@ -124,9 +124,8 @@ public class AdminController {
             return "admin/add-house";
         }
         try {
-            houseService.addNewHouse(houseDto);
-            //TODO: redirect to the page with room adding
-            return "redirect:/admin/houses";
+            House house = houseService.addNewHouse(houseDto);
+            return "redirect:/admin/rooms/" + house.getId();
         } catch (DataExistsException ex) {
             model.addAttribute("error", ex.getMessage());
             return "admin/add-house";
@@ -147,7 +146,8 @@ public class AdminController {
     }
 
     /**
-     * Gets the room list of the certain house.
+     * Gets the room list of the certain house,
+     * calculates the house size.
      *
      * @param houseId unique id of the house
      * @param model   the model
@@ -161,6 +161,11 @@ public class AdminController {
             //TODO: add exception if roomsInHouse list is empty
             model.addAttribute("rooms", roomsInHouse);
             model.addAttribute("house", house);
+            houseService.updateSize(house, 0.0);
+            for (Room r : roomsInHouse) {
+                houseService.updateSize(house, house.getSize() + r.getSize());
+            }
+            System.out.println("House before model adding: " + house);
             return "admin/rooms";
         } catch (IllegalArgumentException ex) {
             model.addAttribute("error", ex.getMessage());

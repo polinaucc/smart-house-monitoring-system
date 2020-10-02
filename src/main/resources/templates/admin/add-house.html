@@ -46,13 +46,6 @@
                    id="flatNumber"
                    th:field="*{flatNumber}"/>
         </div>
-        <div class="error" th:if="${#fields.hasErrors('size')}" th:errors="*{size}">House size Error
-        </div>
-        <div>
-            <input class="form-control" type="text" th:placeholder="#{placeholder.size}" required=""
-                   id="size"
-                   th:field="*{size}"/>
-        </div>
         <div class="error" th:if="${#fields.hasErrors('amountOfRooms')}" th:errors="*{amountOfRooms}">Amounts of Rooms
             Error
         </div>

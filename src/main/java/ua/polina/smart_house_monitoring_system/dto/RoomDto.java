@@ -6,6 +6,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+/**
+ * The type Room dto for room object.
+ */
 @Data
 public class RoomDto {
     @NotNull

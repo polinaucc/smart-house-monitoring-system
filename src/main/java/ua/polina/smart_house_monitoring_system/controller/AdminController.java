@@ -79,7 +79,8 @@ public class AdminController {
      * @return the page for registration or redirection to login page
      */
     @PostMapping("/sign-up")
-    public String registerUser(@Valid @ModelAttribute("signUp") SignUpDto signUpDto,
+    public String registerUser(@Valid @ModelAttribute("signUp")
+                                       SignUpDto signUpDto,
                                BindingResult bindingResult,
                                Model model) {
         if (bindingResult.hasErrors()) {
@@ -133,7 +134,7 @@ public class AdminController {
     }
 
     /**
-     * Gets all house in the system
+     * Gets all house in the system.
      *
      * @param model the model
      * @return the page
@@ -145,6 +146,13 @@ public class AdminController {
         return "admin/houses";
     }
 
+    /**
+     * Gets the room list of the certain house.
+     *
+     * @param houseId unique id of the house
+     * @param model   the model
+     * @return the page with room list
+     */
     @GetMapping("rooms/{id}")
     public String getRooms(@PathVariable("id") Long houseId, Model model) {
         try {
@@ -160,22 +168,42 @@ public class AdminController {
         }
     }
 
+    /**
+     * Gets the page with the form for adding a room to the database.
+     *
+     * @param model the model
+     * @return the page
+     */
     @GetMapping("/add-room")
-    public String getRoomForm(Model model){
+    public String getRoomForm(Model model) {
         model.addAttribute("roomDto", new RoomDto());
         return "admin/add-room";
     }
 
+
+    /**
+     * Saves a certain house room with form data to the database,
+     * if the data is valid.
+     *
+     * @param roomDto       the room dto from the form
+     * @param house         the house, the room should be saved to
+     * @param bindingResult the binding result
+     * @param model         the model
+     * @return redirection to the page with updated room list with the data
+     * if the data is valid and if the amount of house rooms can be increased,
+     * otherwise the page with the form for room adding
+     */
     @PostMapping("/add-room")
     public String addRoom(@Valid @ModelAttribute("roomDto") RoomDto roomDto,
-                          @ModelAttribute("house") House house, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
+                          @ModelAttribute("house") House house,
+                          BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
             return "/admin/add-room";
         }
         try {
             roomService.saveRoom(roomDto, house);
             return "redirect:/admin/rooms/" + house.getId();
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "/admin/add-room";
         }

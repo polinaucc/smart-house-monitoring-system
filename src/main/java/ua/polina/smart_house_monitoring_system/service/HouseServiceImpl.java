@@ -60,14 +60,13 @@ public class HouseServiceImpl implements HouseService {
     }
 
     /**
-     * Save new address to the database with information from the form.
+     * Saves new address to the database with information from the form.
      *
      * @param houseDto the house dto from the form
      * @return The address that is saved to dataBase
      * @throws DataExistsException if the address with entered parameters
      *                             already exists in database
      */
-    //TODO: add exception catching without exists method
     private Address saveAddress(HouseDto houseDto) {
         Address address = Address.builder()
                 .country(houseDto.getCountry())
@@ -87,14 +86,28 @@ public class HouseServiceImpl implements HouseService {
         return addressRepository.save(address);
     }
 
+    /**
+     * Gets all houses in the database.
+     *
+     * @return the list of houses in the database
+     */
     @Override
-    public List<House> getAllHouses(){
+    public List<House> getAllHouses() {
         return houseRepository.findAll();
     }
 
+
+    /**
+     * Finds a house by its id.
+     *
+     * @param id the house unique id
+     * @return the house, if id exists, otherwise exception
+     * @throws IllegalArgumentException if the id doesn't exist
+     */
     @Override
-    public House getById(Long id){
-       return houseRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("No house with such id"));
+    public House getById(Long id) {
+        return houseRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "no.house.with.id"));
     }
 }

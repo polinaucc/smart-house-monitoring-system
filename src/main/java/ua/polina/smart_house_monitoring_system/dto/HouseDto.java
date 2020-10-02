@@ -1,6 +1,9 @@
 package ua.polina.smart_house_monitoring_system.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -10,6 +13,9 @@ import javax.validation.constraints.Pattern;
  * The type House dto for room object
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class HouseDto {
     @NotBlank
     @Pattern(regexp = "^[А-Я][а-я]{3,14}$",

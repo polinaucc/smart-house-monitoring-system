@@ -221,4 +221,8 @@ public class AdminController {
     public String getIndexPage() {
         return "index";
     }
+
+    //TODO: delete rooms
+    //TODO: delete house
+    //TODO: update rooms
 }

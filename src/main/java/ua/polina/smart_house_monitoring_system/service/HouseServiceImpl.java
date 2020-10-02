@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ua.polina.smart_house_monitoring_system.dto.HouseDto;
 import ua.polina.smart_house_monitoring_system.entity.Address;
 import ua.polina.smart_house_monitoring_system.entity.House;
+import ua.polina.smart_house_monitoring_system.entity.Room;
 import ua.polina.smart_house_monitoring_system.exception.DataExistsException;
 import ua.polina.smart_house_monitoring_system.repository.AddressRepository;
 import ua.polina.smart_house_monitoring_system.repository.HouseRepository;
@@ -111,8 +112,11 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
-    public House updateSize(House house, Double newSize) {
-        house.setSize(newSize);
+    public House updateSize(House house, List<Room> roomsInHouse) {
+        house.setSize(0.0);
+        for (Room r : roomsInHouse) {
+            house.setSize(house.getSize() + r.getSize());
+        }
         return houseRepository.save(house);
     }
 

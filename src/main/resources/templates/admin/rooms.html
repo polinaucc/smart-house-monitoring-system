@@ -14,9 +14,6 @@
 <div class="lang2">
     <th:block th:insert="fragments/language :: language"/>
 </div>
-<div th:if="${error != null}">
-    <p th:text="${error}">...</p>
-</div>
 <table class="table table-hover">
     <div th:if="${error != null}">
         <p th:text="#{${error}}">...</p>

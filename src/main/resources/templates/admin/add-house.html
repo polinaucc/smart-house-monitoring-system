@@ -42,7 +42,7 @@
         </div>
         <div class="error" th:if="${#fields.hasErrors('flatNumber')}" th:errors="*{flatNumber}">Flat Number Error</div>
         <div>
-            <input class="form-control" type="text" th:placeholder="#{placeholder.flat.number}" required=""
+            <input class="form-control" type="text" th:placeholder="#{placeholder.flat.number}"
                    id="flatNumber"
                    th:field="*{flatNumber}"/>
         </div>

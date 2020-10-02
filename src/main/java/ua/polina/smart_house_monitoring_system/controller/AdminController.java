@@ -158,14 +158,12 @@ public class AdminController {
         try {
             House house = houseService.getById(houseId);
             List<Room> roomsInHouse = roomService.getRoomsByHouse(house);
-            //TODO: add exception if roomsInHouse list is empty
             model.addAttribute("rooms", roomsInHouse);
             model.addAttribute("house", house);
-            houseService.updateSize(house, 0.0);
-            for (Room r : roomsInHouse) {
-                houseService.updateSize(house, house.getSize() + r.getSize());
+            if (roomsInHouse.size() == 0) {
+                model.addAttribute("error", "empty.list");
             }
-            System.out.println("House before model adding: " + house);
+            houseService.updateSize(house, roomsInHouse);
             return "admin/rooms";
         } catch (IllegalArgumentException ex) {
             model.addAttribute("error", ex.getMessage());

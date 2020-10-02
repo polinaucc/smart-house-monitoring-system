@@ -32,6 +32,12 @@
         <td th:text="${room.id}"></td>
         <td th:text="${room.size}"></td>
         <td th:text="${room.name}"></td>
+        <td>
+            <a th:href="@{/admin/delete-room/{room-id}(room-id=${room.id})}"
+            th:text="#{delete.room}">
+
+            </a>
+        </td>
     </tr>
     </tbody>
 </table>

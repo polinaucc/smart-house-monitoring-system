@@ -183,7 +183,6 @@ public class AdminController {
         return "admin/add-room";
     }
 
-
     /**
      * Saves a certain house room with form data to the database,
      * if the data is valid.
@@ -222,7 +221,21 @@ public class AdminController {
         return "index";
     }
 
-    //TODO: delete rooms
+    @GetMapping("/delete-room/{room-id}")
+    public String deleteRoom(@PathVariable("room-id") Long roomId,
+                             @ModelAttribute("house") House house,
+                             Model model){
+        try{
+            roomService.deleteById(roomId);
+            return "redirect:/admin/rooms/" + house.getId();
+        }
+        catch (IllegalArgumentException ex){
+            model.addAttribute("error", ex.getMessage());
+            return "redirect:/admin/rooms/" + house.getId();
+        }
+
+    }
+
     //TODO: delete house
     //TODO: update rooms
 }

@@ -9,4 +9,5 @@ import java.util.List;
 public interface RoomService {
     List<Room> getRoomsByHouse(House house);
     Room saveRoom(RoomDto roomDto, House house);
+    void deleteById(Long roomId);
 }

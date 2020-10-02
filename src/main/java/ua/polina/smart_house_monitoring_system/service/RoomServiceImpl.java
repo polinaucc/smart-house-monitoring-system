@@ -30,9 +30,17 @@ public class RoomServiceImpl implements RoomService {
                 .size(roomDto.getSize())
                 .house(house)
                 .build();
-        if(house.getAmountOfRooms().equals(roomRepository.countRoomsByHouse(house))){
+        if (house.getAmountOfRooms().equals(roomRepository.countRoomsByHouse(house))) {
             throw new IllegalArgumentException("max.amount.of.rooms");
         }
         return roomRepository.save(room);
+    }
+
+    @Override
+    public void deleteById(Long roomId) {
+        if (roomRepository.findById(roomId).isPresent()) {
+            roomRepository.deleteById(roomId);
+        } else throw new IllegalArgumentException("resource.not.exists");
+
     }
 }

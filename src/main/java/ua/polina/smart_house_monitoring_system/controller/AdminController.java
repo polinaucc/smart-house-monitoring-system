@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import ua.polina.smart_house_monitoring_system.dto.HouseDto;
 import ua.polina.smart_house_monitoring_system.dto.RoomDto;
 import ua.polina.smart_house_monitoring_system.dto.SignUpDto;
+import ua.polina.smart_house_monitoring_system.entity.Address;
 import ua.polina.smart_house_monitoring_system.entity.House;
 import ua.polina.smart_house_monitoring_system.entity.Room;
 import ua.polina.smart_house_monitoring_system.exception.DataExistsException;
+import ua.polina.smart_house_monitoring_system.service.AddressService;
 import ua.polina.smart_house_monitoring_system.service.HouseService;
 import ua.polina.smart_house_monitoring_system.service.RoomService;
 import ua.polina.smart_house_monitoring_system.service.UserService;
@@ -43,6 +45,12 @@ public class AdminController {
     private final RoomService roomService;
 
     /**
+     * The address service. It processes requests about adresses
+     * from controller to database and vice versa.
+     */
+    private final AddressService addressService;
+
+    /**
      * Instantiates a new Auth controller.
      *
      * @param userService  the user service
@@ -51,10 +59,12 @@ public class AdminController {
      */
     public AdminController(UserService userService,
                            HouseService houseService,
-                           RoomService roomService) {
+                           RoomService roomService,
+                           AddressService addressService) {
         this.userService = userService;
         this.houseService = houseService;
         this.roomService = roomService;
+        this.addressService = addressService;
     }
 
     /**
@@ -65,6 +75,8 @@ public class AdminController {
      */
     @GetMapping("/sign-up")
     public String getRegisterPage(Model model) {
+        List<Address> addresses = addressService.getAllAddresses();
+        model.addAttribute("addresses", addresses);
         model.addAttribute("signUp", new SignUpDto());
         model.addAttribute("error", null);
         return "register-client";

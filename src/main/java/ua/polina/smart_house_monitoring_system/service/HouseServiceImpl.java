@@ -6,8 +6,6 @@ import ua.polina.smart_house_monitoring_system.dto.HouseDto;
 import ua.polina.smart_house_monitoring_system.entity.Address;
 import ua.polina.smart_house_monitoring_system.entity.House;
 import ua.polina.smart_house_monitoring_system.entity.Room;
-import ua.polina.smart_house_monitoring_system.exception.DataExistsException;
-import ua.polina.smart_house_monitoring_system.repository.AddressRepository;
 import ua.polina.smart_house_monitoring_system.repository.HouseRepository;
 
 import javax.transaction.Transactional;
@@ -25,19 +23,19 @@ public class HouseServiceImpl implements HouseService {
     /**
      * The Address repository.
      */
-    private AddressRepository addressRepository;
+    private AddressService addressService;
 
     /**
      * Instantiates a new House service.
      *
-     * @param houseRepository   the house repository
-     * @param addressRepository the address repository
+     * @param houseRepository the house repository
+     * @param addressService  the address service
      */
     @Autowired
     public HouseServiceImpl(HouseRepository houseRepository,
-                            AddressRepository addressRepository) {
+                            AddressService addressService) {
         this.houseRepository = houseRepository;
-        this.addressRepository = addressRepository;
+        this.addressService = addressService;
     }
 
     /**
@@ -50,7 +48,7 @@ public class HouseServiceImpl implements HouseService {
     @Transactional
     @Override
     public House addNewHouse(HouseDto houseDto) {
-        Address address = saveAddress(houseDto);
+        Address address = addressService.saveAddress(houseDto);
         House house = House.builder()
                 .address(address)
                 .amountOfRooms(houseDto.getAmountOfRooms())
@@ -59,32 +57,6 @@ public class HouseServiceImpl implements HouseService {
         return houseRepository.save(house);
     }
 
-    /**
-     * Saves new address to the database with information from the form.
-     *
-     * @param houseDto the house dto from the form
-     * @return The address that is saved to dataBase
-     * @throws DataExistsException if the address with entered parameters
-     *                             already exists in database
-     */
-    private Address saveAddress(HouseDto houseDto) {
-        Address address = Address.builder()
-                .country(houseDto.getCountry())
-                .city(houseDto.getCity())
-                .street(houseDto.getStreet())
-                .houseNumber(houseDto.getHouseNumber())
-                .flatNumber(houseDto.getFlatNumber())
-                .build();
-        if (addressRepository.
-                existsAddressByCountryAndCityAndStreetAndHouseNumberAndFlatNumber(
-                        address.getCountry(), address.getCity(),
-                        address.getStreet(), address.getHouseNumber(),
-                        address.getFlatNumber()
-                )) {
-            throw new DataExistsException("address.already.exists");
-        }
-        return addressRepository.save(address);
-    }
 
     /**
      * Gets all houses in the database.
@@ -111,6 +83,13 @@ public class HouseServiceImpl implements HouseService {
                         "no.house.with.id"));
     }
 
+    /**
+     * Updates the size of house depends on room sizes in it.
+     *
+     * @param house        the house
+     * @param roomsInHouse the list of rooms in the house
+     * @return the house with new size value
+     */
     @Override
     public House updateSize(House house, List<Room> roomsInHouse) {
         house.setSize(0.0);
@@ -119,5 +98,21 @@ public class HouseServiceImpl implements HouseService {
         }
         return houseRepository.save(house);
     }
+
+    /**
+     * Gets house by address id if the house exists.
+     *
+     * @param addressId the address id
+     * @return the house with an address that matches an id,
+     * otherwise - exception
+     * @throws IllegalArgumentException if the house with such address
+     *                                  doesn't exist
+     */
+    @Override
+    public House getHouseByAddressId(Long addressId) {
+        return houseRepository.findByAddress_Id(addressId)
+                .orElseThrow(() -> new IllegalArgumentException("illegal.address"));
+    }
+
 
 }

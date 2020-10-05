@@ -14,4 +14,6 @@ public interface HouseService {
     House getById(Long id);
 
     House updateSize(House house, List<Room> roomsInHouse);
+
+    House getHouseByAddressId(Long addressId);
 }

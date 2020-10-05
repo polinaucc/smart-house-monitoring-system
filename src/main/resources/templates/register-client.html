@@ -77,6 +77,13 @@
                    th:value="*{birthday}"
                    th:field="*{birthday}" pattern="dd-MM-yyyy"/>
         </div>
+        <div class="form-group">
+            <label for="address" th:text="#{select.address.of.house}"></label>
+            <select class="form-control" id="address" name="persons" th:field="*{addressId}">
+                <option th:each="ad : ${addresses}"
+                        th:value="${ad.id}" th:text="${ad}"></option>
+            </select>
+        </div>
         <div>
             <label th:text="#{is.owner}" th:for="${#ids.next('role')}">Is owner</label>
             <input type="checkbox" name="role" th:field="*{role}">

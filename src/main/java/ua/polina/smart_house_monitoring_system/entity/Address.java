@@ -46,4 +46,10 @@ public class Address {
 
     @OneToOne(mappedBy = "address", cascade = CascadeType.ALL)
     private House house;
+
+    @Override
+    public String toString() {
+        return country + " " + city + " " + street + " "
+                + houseNumber + "/" + flatNumber;
+    }
 }

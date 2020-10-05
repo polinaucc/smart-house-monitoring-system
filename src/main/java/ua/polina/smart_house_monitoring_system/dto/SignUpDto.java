@@ -60,5 +60,8 @@ public class SignUpDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Past(message = "{wrong.format}")
     private LocalDate birthday;
+
+    private Long addressId;
+
     private Boolean role;
 }

@@ -33,19 +33,27 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     /**
+     * The house service.
+     */
+    private HouseService houseService;
+
+    /**
      * Instantiates a new User service.
      *
      * @param userRepository     the user repository
      * @param residentRepository the resident repository
      * @param passwordEncoder    the password encoder
+     * @param houseService       the house service
      */
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            ResidentRepository residentRepository,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           HouseService houseService) {
         this.userRepository = userRepository;
         this.residentRepository = residentRepository;
         this.passwordEncoder = passwordEncoder;
+        this.houseService = houseService;
     }
 
     /**
@@ -105,6 +113,7 @@ public class UserServiceImpl implements UserService {
                 .lastNameRu(signUpDto.getLastNameRu())
                 .passport(signUpDto.getPassport())
                 .birthday(signUpDto.getBirthday())
+                .house(houseService.getHouseByAddressId(signUpDto.getAddressId()))
                 .user(user)
                 .build();
 

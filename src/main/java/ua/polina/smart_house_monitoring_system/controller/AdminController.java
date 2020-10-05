@@ -182,10 +182,10 @@ public class AdminController {
                 model.addAttribute("error", "empty.list");
             }
             houseService.updateSize(house, roomsInHouse);
-            return "admin/rooms";
+            return "rooms";
         } catch (IllegalArgumentException ex) {
             model.addAttribute("error", ex.getMessage());
-            return "admin/rooms";
+            return "rooms";
         }
     }
 

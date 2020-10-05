@@ -1,4 +1,4 @@
-package ua.polina.smart_house_monitoring_system.service;
+package ua.polina.smart_house_monitoring_system.service.impl;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;

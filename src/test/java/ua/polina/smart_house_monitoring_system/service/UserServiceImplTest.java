@@ -13,10 +13,10 @@ import ua.polina.smart_house_monitoring_system.entity.Resident;
 import ua.polina.smart_house_monitoring_system.entity.User;
 import ua.polina.smart_house_monitoring_system.repository.ResidentRepository;
 import ua.polina.smart_house_monitoring_system.repository.UserRepository;
+import ua.polina.smart_house_monitoring_system.service.impl.UserServiceImpl;
 
 import java.time.LocalDate;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

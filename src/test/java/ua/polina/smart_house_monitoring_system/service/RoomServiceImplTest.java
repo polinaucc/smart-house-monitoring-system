@@ -12,6 +12,7 @@ import ua.polina.smart_house_monitoring_system.entity.Address;
 import ua.polina.smart_house_monitoring_system.entity.House;
 import ua.polina.smart_house_monitoring_system.entity.Room;
 import ua.polina.smart_house_monitoring_system.repository.RoomRepository;
+import ua.polina.smart_house_monitoring_system.service.impl.RoomServiceImpl;
 
 import java.util.Arrays;
 import java.util.List;

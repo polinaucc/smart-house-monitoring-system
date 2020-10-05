@@ -1,4 +1,4 @@
-package ua.polina.smart_house_monitoring_system.service;
+package ua.polina.smart_house_monitoring_system.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,6 +6,7 @@ import ua.polina.smart_house_monitoring_system.dto.RoomDto;
 import ua.polina.smart_house_monitoring_system.entity.House;
 import ua.polina.smart_house_monitoring_system.entity.Room;
 import ua.polina.smart_house_monitoring_system.repository.RoomRepository;
+import ua.polina.smart_house_monitoring_system.service.RoomService;
 
 import java.util.List;
 

@@ -32,7 +32,7 @@
         <td th:text="${room.id}"></td>
         <td th:text="${room.size}"></td>
         <td th:text="${room.name}"></td>
-        <td>
+        <td th:if="${#httpServletRequest.remoteUser=='admin'}">
             <a th:href="@{/admin/delete-room/{room-id}(room-id=${room.id})}"
             th:text="#{delete.room}">
 
@@ -41,10 +41,10 @@
     </tr>
     </tbody>
 </table>
-<div>
+<div th:if="${#httpServletRequest.remoteUser=='admin'}">
     <a th:href="@{/admin/add-room}" th:text="#{add.room}"></a>
 </div>
-<div>
+<div th:if="${#httpServletRequest.remoteUser=='admin'}">
     <a th:href="@{/admin/houses}" th:text="#{admin.house.list}"></a>
 </div>
 <div>

@@ -16,4 +16,6 @@ public interface HouseRepository extends JpaRepository<House, Long> {
      * @return the optional that is empty if the house doesn't exist
      */
     Optional<House> findByAddress_Id(Long addressId);
+
+
 }

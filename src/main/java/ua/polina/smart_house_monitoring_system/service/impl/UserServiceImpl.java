@@ -1,4 +1,4 @@
-package ua.polina.smart_house_monitoring_system.service;
+package ua.polina.smart_house_monitoring_system.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,6 +10,8 @@ import ua.polina.smart_house_monitoring_system.entity.User;
 import ua.polina.smart_house_monitoring_system.exception.DataExistsException;
 import ua.polina.smart_house_monitoring_system.repository.ResidentRepository;
 import ua.polina.smart_house_monitoring_system.repository.UserRepository;
+import ua.polina.smart_house_monitoring_system.service.HouseService;
+import ua.polina.smart_house_monitoring_system.service.UserService;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
@@ -64,7 +66,7 @@ public class UserServiceImpl implements UserService {
      * @throws DataExistsException if user with entered username already exists
      *                             in database
      */
-    public User saveNewUser(final SignUpDto signUpDto) {
+    public User saveNewUser(SignUpDto signUpDto) {
         if (userRepository.existsByUsername(signUpDto.getUsername())) {
             throw new DataExistsException("username.exists");
         }
@@ -118,5 +120,19 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         return residentRepository.save(resident);
+    }
+
+    /**
+     * Gets a resident by user.
+     *
+     * @param user the user
+     * @return the resident if he exists, otherwise exception
+     * @throws IllegalArgumentException if the resident by such user
+     *                                  doesn't exists
+     */
+    @Override
+    public Resident getResidentByUser(User user) {
+        return residentRepository.findByUser(user)
+                .orElseThrow(() -> new IllegalArgumentException("no.such.resident"));
     }
 }

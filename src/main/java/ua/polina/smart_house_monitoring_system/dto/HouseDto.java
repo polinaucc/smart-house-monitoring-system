@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 /**
- * The type House dto for room object
+ * The type House dto for house object
  */
 @Data
 @Builder

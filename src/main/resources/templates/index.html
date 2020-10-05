@@ -24,6 +24,10 @@
                 <li class="nav-item" th:if="${#httpServletRequest.remoteUser=='admin'}">
                     <a class="nav-link" th:href="@{/admin/houses}" th:text="#{admin.house.list}">House list</a>
                 </li>
+                <li class="nav-item" th:if="${#httpServletRequest.remoteUser=='admin'}">
+                    <a class="nav-link" th:href="@{/admin/add-device}" th:text="#{add.device}">Add device</a>
+                </li>
+
             </ul>
             <div class="lang2">
                 <div th:fragment="language">

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ua.polina.smart_house_monitoring_system.dto.DeviceDto;
 import ua.polina.smart_house_monitoring_system.dto.HouseDto;
 import ua.polina.smart_house_monitoring_system.dto.RoomDto;
 import ua.polina.smart_house_monitoring_system.dto.SignUpDto;
@@ -11,10 +12,7 @@ import ua.polina.smart_house_monitoring_system.entity.Address;
 import ua.polina.smart_house_monitoring_system.entity.House;
 import ua.polina.smart_house_monitoring_system.entity.Room;
 import ua.polina.smart_house_monitoring_system.exception.DataExistsException;
-import ua.polina.smart_house_monitoring_system.service.AddressService;
-import ua.polina.smart_house_monitoring_system.service.HouseService;
-import ua.polina.smart_house_monitoring_system.service.RoomService;
-import ua.polina.smart_house_monitoring_system.service.UserService;
+import ua.polina.smart_house_monitoring_system.service.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -51,20 +49,28 @@ public class AdminController {
     private final AddressService addressService;
 
     /**
+     * The device service.
+     */
+    private final DeviceService deviceService;
+
+    /**
      * Instantiates a new Auth controller.
      *
      * @param userService  the user service
      * @param houseService the house service
      * @param roomService  the room service
+     * @param deviceService the device service
      */
     public AdminController(UserService userService,
                            HouseService houseService,
                            RoomService roomService,
-                           AddressService addressService) {
+                           AddressService addressService,
+                           DeviceService deviceService) {
         this.userService = userService;
         this.houseService = houseService;
         this.roomService = roomService;
         this.addressService = addressService;
+        this.deviceService = deviceService;
     }
 
     /**
@@ -236,16 +242,37 @@ public class AdminController {
     @GetMapping("/delete-room/{room-id}")
     public String deleteRoom(@PathVariable("room-id") Long roomId,
                              @ModelAttribute("house") House house,
-                             Model model){
-        try{
+                             Model model) {
+        try {
             roomService.deleteById(roomId);
             return "redirect:/admin/rooms/" + house.getId();
-        }
-        catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException ex) {
             model.addAttribute("error", ex.getMessage());
             return "redirect:/admin/rooms/" + house.getId();
         }
 
+    }
+
+    @GetMapping("/add-device")
+    public String getDeviceForm(Model model) {
+        model.addAttribute("error", null);
+        model.addAttribute("deviceDto", new DeviceDto());
+        return "admin/add-device";
+    }
+
+    @PostMapping("/add-device")
+    public String addDevice(@Valid @ModelAttribute("deviceDto") DeviceDto deviceDto,
+                            BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "/admin/add-device";
+        }
+        try {
+            deviceService.saveDevice(deviceDto);
+            return "redirect:/admin/index";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "/admin/add-device";
+        }
     }
 
     //TODO: delete house

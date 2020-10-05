@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Requests</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+</head>
+<body>
+<div class="header-container">
+    <h3 th:text="#{device.list}">Devices</h3>
+</div>
+<div class="lang2">
+    <th:block th:insert="fragments/language :: language"/>
+</div>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th th:text="#{device.id}">House id</th>
+        <th th:text="#{device.name}">Size</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="device, iStat : ${devices}"
+        th:style="${iStat.odd}? 'font-weight: bold;'"
+        th:alt-title="${iStat.even}? 'even' : 'odd'">
+        <td th:text="${device.id}"></td>
+        <td th:text="${device.name}"></td>
+    </tr>
+    </tbody>
+</table>
+<div>
+    <a th:href="@{/owner/index}" th:text="#{home}"></a>
+</div>
+</body>
+</html>

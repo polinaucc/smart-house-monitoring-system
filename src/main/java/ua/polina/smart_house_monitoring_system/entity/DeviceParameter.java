@@ -22,9 +22,22 @@ public class DeviceParameter {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_device_id")
+    private DeviceRoom roomDevice;
+
     @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "min_theor_value", nullable = false)
+    private Double minTheoreticalValue;
+
+    @Column(name = "max_theor_value", nullable = false)
+    private Double maxTheoreticalValue;
+
+    @Column(name = "value")
+    private Double value;
 }

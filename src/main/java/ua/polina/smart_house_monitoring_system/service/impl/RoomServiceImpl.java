@@ -44,4 +44,10 @@ public class RoomServiceImpl implements RoomService {
         } else throw new IllegalArgumentException("resource.not.exists");
 
     }
+
+    @Override
+    public Room getById(Long id) {
+        return roomRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("no.room.with.such.id"));
+    }
 }

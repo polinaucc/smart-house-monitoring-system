@@ -4,25 +4,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.polina.smart_house_monitoring_system.dto.DeviceDto;
 import ua.polina.smart_house_monitoring_system.entity.Device;
-import ua.polina.smart_house_monitoring_system.entity.State;
+import ua.polina.smart_house_monitoring_system.entity.DeviceRoom;
+import ua.polina.smart_house_monitoring_system.entity.Room;
+import ua.polina.smart_house_monitoring_system.exception.DataExistsException;
 import ua.polina.smart_house_monitoring_system.repository.DeviceRepository;
+import ua.polina.smart_house_monitoring_system.repository.DeviceRoomRepository;
 import ua.polina.smart_house_monitoring_system.service.DeviceService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
-public class DeviceServiceImpl  implements DeviceService {
+public class DeviceServiceImpl implements DeviceService {
     DeviceRepository deviceRepository;
+    DeviceRoomRepository deviceRoomRepository;
 
     @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository,
+                             DeviceRoomRepository deviceRoomRepository) {
         this.deviceRepository = deviceRepository;
+        this.deviceRoomRepository = deviceRoomRepository;
     }
 
     @Override
     public Device saveDevice(DeviceDto deviceDto) {
+        if (deviceRepository.existsByName(deviceDto.getName())) {
+            throw new DataExistsException("device.name.exists");
+        }
         Device device = Device.builder()
                 .name(deviceDto.getName())
-                .state(State.OFF)
                 .build();
         return deviceRepository.save(device);
+    }
+
+    @Override
+    public List<Device> getDevicesByRoom(Room room) {
+        List<DeviceRoom> deviceRoomList = deviceRoomRepository.findDeviceRoomByRoom(room);
+        List<Device> devices = new ArrayList<>();
+        for (DeviceRoom d :
+                deviceRoomList) {
+            devices.add(d.getDevice());
+        }
+        return devices;
     }
 }

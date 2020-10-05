@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.polina.smart_house_monitoring_system.entity.*;
+import ua.polina.smart_house_monitoring_system.service.DeviceService;
 import ua.polina.smart_house_monitoring_system.service.RoomService;
 import ua.polina.smart_house_monitoring_system.service.UserService;
 
@@ -16,11 +18,14 @@ import java.util.List;
 public class OwnerController {
     private final UserService userService;
     private final RoomService roomService;
+    private final DeviceService deviceService;
 
     @Autowired
-    public OwnerController(UserService userService, RoomService roomService) {
+    public OwnerController(UserService userService, RoomService roomService,
+                           DeviceService deviceService) {
         this.userService = userService;
         this.roomService = roomService;
+        this.deviceService = deviceService;
     }
 
     @GetMapping("/my-rooms")
@@ -36,6 +41,19 @@ public class OwnerController {
             model.addAttribute("error", ex.getMessage());
             return "index";
         }
+    }
+
+    @GetMapping("/my-devices/{room-id}")
+    public String getDevicesInRoom(@PathVariable("room-id") Long roomId, Model model) {
+        Room room = roomService.getById(roomId);
+        List<Device> devices = deviceService.getDevicesByRoom(room);
+        model.addAttribute("devices", devices);
+        model.addAttribute("error", null);
+        return "devices";
+    }
+
+    public String addDevice(Model model) {
+        return null;
     }
 
     @GetMapping("/index")

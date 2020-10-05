@@ -106,7 +106,7 @@ public class AdminController {
         }
         try {
             userService.saveNewResident(signUpDto);
-            return "redirect:/auth/login";
+            return "redirect:/admin/index";
         } catch (DataExistsException ex) {
             model.addAttribute("error", ex.getMessage());
             return "register-client";
@@ -218,6 +218,7 @@ public class AdminController {
                           @ModelAttribute("house") House house,
                           BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            //TODO: add to the form message of NumberFormat annotation (typeMismatch)
             return "/admin/add-room";
         }
         try {
@@ -269,7 +270,7 @@ public class AdminController {
         try {
             deviceService.saveDevice(deviceDto);
             return "redirect:/admin/index";
-        } catch (IllegalArgumentException e) {
+        } catch (DataExistsException e) {
             model.addAttribute("error", e.getMessage());
             return "/admin/add-device";
         }

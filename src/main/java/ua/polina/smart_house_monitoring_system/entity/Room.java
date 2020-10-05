@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * The entity for Room presentation.
@@ -32,5 +33,11 @@ public class Room {
     @ManyToOne
     @JoinColumn(name = "house_id")
     private House house;
+
+    @OneToMany(mappedBy = "room")
+    private List<DeviceRoom> deviceRooms;
+
+    @OneToMany(mappedBy = "room")
+    private List<RoomParameter> roomParameters;
 
 }

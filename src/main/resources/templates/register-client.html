@@ -79,7 +79,7 @@
         </div>
         <div class="form-group">
             <label for="address" th:text="#{select.address.of.house}"></label>
-            <select class="form-control" id="address" name="persons" th:field="*{addressId}">
+            <select class="form-control" id="address" name="addresses" th:field="*{addressId}">
                 <option th:each="ad : ${addresses}"
                         th:value="${ad.id}" th:text="${ad}"></option>
             </select>

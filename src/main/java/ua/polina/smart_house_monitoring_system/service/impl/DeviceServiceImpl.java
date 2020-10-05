@@ -3,9 +3,11 @@ package ua.polina.smart_house_monitoring_system.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.polina.smart_house_monitoring_system.dto.DeviceDto;
+import ua.polina.smart_house_monitoring_system.dto.DeviceUserDto;
 import ua.polina.smart_house_monitoring_system.entity.Device;
 import ua.polina.smart_house_monitoring_system.entity.DeviceRoom;
 import ua.polina.smart_house_monitoring_system.entity.Room;
+import ua.polina.smart_house_monitoring_system.entity.State;
 import ua.polina.smart_house_monitoring_system.exception.DataExistsException;
 import ua.polina.smart_house_monitoring_system.repository.DeviceRepository;
 import ua.polina.smart_house_monitoring_system.repository.DeviceRoomRepository;
@@ -38,6 +40,19 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
+    public DeviceRoom saveDevice(DeviceUserDto deviceDto, Room room) {
+        Device device = deviceRepository.findById(deviceDto.getDeviceId())
+                .orElseThrow(()->new IllegalArgumentException("no.such.device"));
+        DeviceRoom deviceRoom = DeviceRoom.builder()
+                .room(room)
+                .device(device)
+                .state(State.OFF)
+                .build();
+
+        return deviceRoomRepository.save(deviceRoom);
+    }
+
+    @Override
     public List<Device> getDevicesByRoom(Room room) {
         List<DeviceRoom> deviceRoomList = deviceRoomRepository.findDeviceRoomByRoom(room);
         List<Device> devices = new ArrayList<>();
@@ -46,5 +61,10 @@ public class DeviceServiceImpl implements DeviceService {
             devices.add(d.getDevice());
         }
         return devices;
+    }
+
+    @Override
+    public List<Device> getAllDevices() {
+        return deviceRepository.findAll();
     }
 }

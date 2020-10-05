@@ -16,4 +16,8 @@ public interface DeviceService {
     List<Device> getDevicesByRoom(Room room);
 
     List<Device> getAllDevices();
+
+    Device getDeviceById(Long id);
+
+    List<DeviceRoom> getDeviceRoomByRoomAndDevice(Room room, Device device);
 }

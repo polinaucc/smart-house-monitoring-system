@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.polina.smart_house_monitoring_system.dto.DeviceUserDto;
 import ua.polina.smart_house_monitoring_system.entity.*;
+import ua.polina.smart_house_monitoring_system.service.DeviceParameterService;
 import ua.polina.smart_house_monitoring_system.service.DeviceService;
 import ua.polina.smart_house_monitoring_system.service.RoomService;
 import ua.polina.smart_house_monitoring_system.service.UserService;
@@ -19,13 +20,16 @@ public class OwnerController {
     private final UserService userService;
     private final RoomService roomService;
     private final DeviceService deviceService;
+    private final DeviceParameterService deviceParameterService;
 
     @Autowired
     public OwnerController(UserService userService, RoomService roomService,
-                           DeviceService deviceService) {
+                           DeviceService deviceService,
+                           DeviceParameterService deviceParameterService) {
         this.userService = userService;
         this.roomService = roomService;
         this.deviceService = deviceService;
+        this.deviceParameterService = deviceParameterService;
     }
 
     @GetMapping("/my-rooms")
@@ -64,15 +68,30 @@ public class OwnerController {
 
     @PostMapping("/add-device")
     public String addDevice(@ModelAttribute("deviceDto") DeviceUserDto deviceUserDto,
-                            @ModelAttribute("room") Room room,  Model model) {
-       try{
-           deviceService.saveDevice(deviceUserDto, room);
-           return "redirect:/owner/my-devices/" + room.getId();
-       }
-       catch (IllegalArgumentException e){
-           model.addAttribute("error", e.getMessage());
-           return "client/add-device";
-       }
+                            @ModelAttribute("room") Room room, Model model) {
+        try {
+            deviceService.saveDevice(deviceUserDto, room);
+            return "redirect:/owner/my-devices/" + room.getId();
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "client/add-device";
+        }
+    }
+
+    @GetMapping("/get-parameters/{device-id}")
+    public String getDeviceParameters(@PathVariable("device-id") Long deviceId,
+                                      @ModelAttribute("room") Room room, Model model) {
+        try {
+            Device device = deviceService.getDeviceById(deviceId);
+            List<DeviceRoom> deviceRooms = deviceService.getDeviceRoomByRoomAndDevice(room, device);
+            List<DeviceParameter> deviceParameters
+                    = deviceParameterService.getDeviceParametersByDeviceRoom(deviceRooms);
+            model.addAttribute("deviceParameters", deviceParameters);
+            return "client/device-parameters";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "client/device-parameters";
+        }
     }
 
     @GetMapping("/index")

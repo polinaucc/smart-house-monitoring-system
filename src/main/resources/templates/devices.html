@@ -28,6 +28,10 @@
         th:alt-title="${iStat.even}? 'even' : 'odd'">
         <td th:text="${device.id}"></td>
         <td th:text="${device.name}"></td>
+        <td>
+            <a th:href="@{/owner/get-parameters/{device-id}(device-id=${device.id})}"
+               th:text="#{device.parameters}"></a>
+        </td>
     </tr>
     </tbody>
 </table>

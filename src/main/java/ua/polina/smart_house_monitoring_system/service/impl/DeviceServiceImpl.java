@@ -67,4 +67,15 @@ public class DeviceServiceImpl implements DeviceService {
     public List<Device> getAllDevices() {
         return deviceRepository.findAll();
     }
+
+    @Override
+    public Device getDeviceById(Long id) {
+        return deviceRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("no.such.device"));
+    }
+
+    @Override
+    public List<DeviceRoom> getDeviceRoomByRoomAndDevice(Room room, Device device) {
+        return deviceRoomRepository.findDeviceRoomByRoomAndDevice(room, device);
+    }
 }

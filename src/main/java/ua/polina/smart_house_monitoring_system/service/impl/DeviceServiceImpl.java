@@ -13,7 +13,6 @@ import ua.polina.smart_house_monitoring_system.repository.DeviceRepository;
 import ua.polina.smart_house_monitoring_system.repository.DeviceRoomRepository;
 import ua.polina.smart_house_monitoring_system.service.DeviceService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -53,14 +52,14 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public List<Device> getDevicesByRoom(Room room) {
+    public List<DeviceRoom> getDevicesByRoom(Room room) {
         List<DeviceRoom> deviceRoomList = deviceRoomRepository.findDeviceRoomByRoom(room);
-        List<Device> devices = new ArrayList<>();
-        for (DeviceRoom d :
-                deviceRoomList) {
-            devices.add(d.getDevice());
-        }
-        return devices;
+//        List<Device> devices = new ArrayList<>();
+//        for (DeviceRoom d :
+//                deviceRoomList) {
+//            devices.add(d.getDevice());
+//        }
+        return deviceRoomList;
     }
 
     @Override
@@ -77,5 +76,11 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public List<DeviceRoom> getDeviceRoomByRoomAndDevice(Room room, Device device) {
         return deviceRoomRepository.findDeviceRoomByRoomAndDevice(room, device);
+    }
+
+    @Override
+    public DeviceRoom getDeviceRoomById(Long id) {
+        return deviceRoomRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("no.such.device"));
     }
 }

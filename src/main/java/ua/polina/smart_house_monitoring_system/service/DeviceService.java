@@ -13,11 +13,13 @@ public interface DeviceService {
 
     DeviceRoom saveDevice(DeviceUserDto deviceDto, Room room);
 
-    List<Device> getDevicesByRoom(Room room);
+    List<DeviceRoom> getDevicesByRoom(Room room);
 
     List<Device> getAllDevices();
 
     Device getDeviceById(Long id);
 
     List<DeviceRoom> getDeviceRoomByRoomAndDevice(Room room, Device device);
+
+    DeviceRoom getDeviceRoomById(Long id);
 }

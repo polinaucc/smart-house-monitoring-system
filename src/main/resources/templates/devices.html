@@ -23,13 +23,13 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="device, iStat : ${devices}"
+    <tr th:each="dr, iStat : ${deviceRooms}"
         th:style="${iStat.odd}? 'font-weight: bold;'"
         th:alt-title="${iStat.even}? 'even' : 'odd'">
-        <td th:text="${device.id}"></td>
-        <td th:text="${device.name}"></td>
+        <td th:text="${dr.device.id}"></td>
+        <td th:text="${dr.device.name}"></td>
         <td>
-            <a th:href="@{/owner/get-parameters/{device-id}(device-id=${device.id})}"
+            <a th:href="@{/owner/get-parameters/{device-room-id}(device-room-id=${dr.id})}"
                th:text="#{device.parameters}"></a>
         </td>
     </tr>

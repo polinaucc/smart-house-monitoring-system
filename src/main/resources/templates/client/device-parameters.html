@@ -19,6 +19,7 @@
     <thead>
     <tr>
         <th th:text="#{device.parameter.id}">House id</th>
+        <th th:text="#{device.parameter.name}">Name</th>
         <th th:text="#{device.parameter.description}">Size</th>
         <th th:text="#{device.parameter.min.value}">Amount of rooms</th>
         <th th:text="#{device.parameter.max.value}">Countyr</th>
@@ -30,12 +31,19 @@
         th:style="${iStat.odd}? 'font-weight: bold;'"
         th:alt-title="${iStat.even}? 'even' : 'odd'">
         <td th:text="${dp.id}"></td>
+        <td th:text="${dp.name}"></td>
         <td th:text="${dp.description}"></td>
         <td th:text="${dp.minTheoreticalValue}"></td>
         <td th:text="${dp.maxTheoreticalValue}"></td>
-        <td th:text="${dp.roomDevice.device.state==T(ua.polina.smart_house_monitoring_system.entity.State).OFF}? ${dp.value}:' - '"></td>
+        <td th:text="${dp.roomDevice.state==T(ua.polina.smart_house_monitoring_system.entity.State).ON}? ${dp.value}:' - '"></td>
     </tr>
     </tbody>
 </table>
+<div>
+    <a th:href="@{/owner/add-parameter}" th:text="#{add.parameter}"></a>
+</div>
+<div>
+    <a th:href="@{/owner/index}" th:text="#{home}"></a>
+</div>
 </body>
 </html>

@@ -3,7 +3,9 @@ package ua.polina.smart_house_monitoring_system.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ua.polina.smart_house_monitoring_system.dto.DeviceParameterDto;
 import ua.polina.smart_house_monitoring_system.dto.DeviceUserDto;
 import ua.polina.smart_house_monitoring_system.entity.*;
 import ua.polina.smart_house_monitoring_system.service.DeviceParameterService;
@@ -11,10 +13,11 @@ import ua.polina.smart_house_monitoring_system.service.DeviceService;
 import ua.polina.smart_house_monitoring_system.service.RoomService;
 import ua.polina.smart_house_monitoring_system.service.UserService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@SessionAttributes("room")
+@SessionAttributes(value = {"room", "deviceRoom"})
 @RequestMapping("/owner")
 public class OwnerController {
     private final UserService userService;
@@ -51,8 +54,8 @@ public class OwnerController {
     public String getDevicesInRoom(@PathVariable("room-id") Long roomId, Model model) {
         Room room = roomService.getById(roomId);
         model.addAttribute("room", room);
-        List<Device> devices = deviceService.getDevicesByRoom(room);
-        model.addAttribute("devices", devices);
+        List<DeviceRoom> deviceRoomList = deviceService.getDevicesByRoom(room);
+        model.addAttribute("deviceRooms", deviceRoomList);
         model.addAttribute("error", null);
         return "devices";
     }
@@ -78,19 +81,44 @@ public class OwnerController {
         }
     }
 
-    @GetMapping("/get-parameters/{device-id}")
-    public String getDeviceParameters(@PathVariable("device-id") Long deviceId,
+    @GetMapping("/get-parameters/{device-room-id}")
+    public String getDeviceParameters(@PathVariable("device-room-id") Long deviceRoomId,
                                       @ModelAttribute("room") Room room, Model model) {
         try {
-            Device device = deviceService.getDeviceById(deviceId);
-            List<DeviceRoom> deviceRooms = deviceService.getDeviceRoomByRoomAndDevice(room, device);
+            DeviceRoom deviceRoom = deviceService.getDeviceRoomById(deviceRoomId);
+//            Device device = deviceService.getDeviceById(deviceId);
+            model.addAttribute("deviceRoom", deviceRoom);
             List<DeviceParameter> deviceParameters
-                    = deviceParameterService.getDeviceParametersByDeviceRoom(deviceRooms);
+                    = deviceParameterService.getDeviceParametersByDeviceRoom(deviceRoom);
             model.addAttribute("deviceParameters", deviceParameters);
             return "client/device-parameters";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "client/device-parameters";
+        }
+    }
+
+    @GetMapping("/add-parameter")
+    public String getAddParameterForm(Model model) {
+        model.addAttribute("deviceParameterDto", new DeviceParameterDto());
+        model.addAttribute("error", null);
+        return "/client/add-device-parameter";
+    }
+
+    @PostMapping("/add-parameter")
+    public String addParameter(@Valid @ModelAttribute("deviceParameterDto") DeviceParameterDto deviceParameterDto,
+                               @ModelAttribute("deviceRoom") DeviceRoom deviceRoom,
+                               @ModelAttribute("room") Room room, BindingResult bindingResult,
+                               Model model) {
+        if (bindingResult.hasErrors()) {
+            return "/client/add-device-parameter";
+        }
+        try {
+            deviceParameterService.saveDeviceParameter(deviceParameterDto, deviceRoom);
+            return "redirect:/owner/get-parameters/" + deviceRoom.getId();
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "/client/add-device-parameter";
         }
     }
 

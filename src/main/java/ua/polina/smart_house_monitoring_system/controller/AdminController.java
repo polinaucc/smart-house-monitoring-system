@@ -198,6 +198,7 @@ public class AdminController {
     @GetMapping("/add-room")
     public String getRoomForm(Model model) {
         model.addAttribute("roomDto", new RoomDto());
+        model.addAttribute("error", null);
         return "admin/add-room";
     }
 

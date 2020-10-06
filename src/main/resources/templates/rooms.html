@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="header-container">
-    <h3 th:text="#{admin.house.list}">Requests</h3>
+    <h3 th:text="#{room.list}">Rooms</h3>
 </div>
 <div class="lang2">
     <th:block th:insert="fragments/language :: language"/>
@@ -53,8 +53,11 @@
 <div th:if="${#httpServletRequest.remoteUser=='admin'}">
     <a th:href="@{/admin/houses}" th:text="#{admin.house.list}"></a>
 </div>
-<div>
+<div th:if="${#httpServletRequest.remoteUser=='admin'}">
     <a th:href="@{/admin/index}" th:text="#{home}"></a>
+</div>
+<div th:if="${#httpServletRequest.remoteUser!='admin'}">
+    <a th:href="@{/resident/index}" th:text="#{home}"></a>
 </div>
 </body>
 </html>

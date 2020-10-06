@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import ua.polina.smart_house_monitoring_system.entity.Role;
 
 /**
  * The type Spring security web app config.
@@ -46,10 +47,11 @@ public class SpringSecurityWebAppConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .authorizeRequests()
                 .antMatchers("/resident/**")
-                .access(
-                        "hasAuthority(T(ua.polina"
-                                + ".smart_house_monitoring_system.entity.Role)"
-                                + ".RESIDENT.getAuthority())");
+                .hasAnyAuthority(Role.OWNER.name(), Role.RESIDENT.name());
+//                .access(
+//                        "hasAuthority(T(ua.polina"
+//                                + ".smart_house_monitoring_system.entity.Role)"
+//                                + ".RESIDENT.getAuthority())");
 
         httpSecurity
                 .authorizeRequests()

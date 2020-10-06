@@ -19,12 +19,28 @@ import ua.polina.smart_house_monitoring_system.service.DeviceService;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * The Owner controller. It processes requests for owner role.
+ */
 @Controller
 @RequestMapping("/owner")
 public class OwnerController {
+    /**
+     * The device service.
+     */
     private final DeviceService deviceService;
+
+    /**
+     * The device parameter service.
+     */
     private final DeviceParameterService deviceParameterService;
 
+    /**
+     * Instantiates a new Owner controller.
+     *
+     * @param deviceService          the device service
+     * @param deviceParameterService the device parameter service
+     */
     @Autowired
     public OwnerController(DeviceService deviceService,
                            DeviceParameterService deviceParameterService) {
@@ -32,6 +48,12 @@ public class OwnerController {
         this.deviceParameterService = deviceParameterService;
     }
 
+    /**
+     * Gets a form for device adding.
+     *
+     * @param model the model
+     * @return the add device form
+     */
     @GetMapping("/add-device")
     public String getAddDeviceForm(Model model) {
         List<Device> devices = deviceService.getAllDevices();
@@ -41,8 +63,18 @@ public class OwnerController {
         return "client/add-device";
     }
 
+    /**
+     * Adds a device to the room.
+     *
+     * @param deviceUserDto the device user dto
+     * @param room          the room
+     * @param model         the model
+     * @return the page with the list of devices, if all is ok,
+     * otherwise - redirection to the page with the form for device adding.
+     */
     @PostMapping("/add-device")
-    public String addDevice(@ModelAttribute("deviceDto") DeviceUserDto deviceUserDto,
+    public String addDevice(@ModelAttribute("deviceDto")
+                                    DeviceUserDto deviceUserDto,
                             @ModelAttribute("room") Room room, Model model) {
         try {
             deviceService.saveDevice(deviceUserDto, room);
@@ -53,6 +85,12 @@ public class OwnerController {
         }
     }
 
+    /**
+     * Gets the page with the form for parameter adding.
+     *
+     * @param model the model
+     * @return the page with the form for device parameter adding
+     */
     @GetMapping("/add-parameter")
     public String getAddParameterForm(Model model) {
         model.addAttribute("deviceParameterDto", new DeviceParameterDto());
@@ -60,16 +98,31 @@ public class OwnerController {
         return "/client/add-device-parameter";
     }
 
+    /**
+     * Adds parameter.
+     *
+     * @param deviceParameterDto the device parameter dto
+     * @param deviceRoom         the device room
+     * @param room               the room
+     * @param bindingResult      the binding result
+     * @param model              the model
+     * @return the page with the list of device parameters, if binding
+     * result has o errors, otherwise -the page with the form for device
+     * parameter adding.
+     */
     @PostMapping("/add-parameter")
-    public String addParameter(@Valid @ModelAttribute("deviceParameterDto") DeviceParameterDto deviceParameterDto,
+    public String addParameter(@Valid @ModelAttribute("deviceParameterDto")
+                                       DeviceParameterDto deviceParameterDto,
                                @ModelAttribute("deviceRoom") DeviceRoom deviceRoom,
-                               @ModelAttribute("room") Room room, BindingResult bindingResult,
+                               @ModelAttribute("room") Room room,
+                               BindingResult bindingResult,
                                Model model) {
         if (bindingResult.hasErrors()) {
             return "/client/add-device-parameter";
         }
         try {
-            deviceParameterService.saveDeviceParameter(deviceParameterDto, deviceRoom);
+            deviceParameterService
+                    .saveDeviceParameter(deviceParameterDto, deviceRoom);
             return "redirect:/owner/get-parameters/" + deviceRoom.getId();
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());

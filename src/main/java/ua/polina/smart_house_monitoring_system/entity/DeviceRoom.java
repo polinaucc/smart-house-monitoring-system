@@ -10,7 +10,9 @@ import javax.persistence.*;
 import java.time.LocalTime;
 
 /**
- * The entity for device presentation.
+ * The entity for presentation of device in the room.
+ *
+ * @author Polina Serhiienko
  */
 @Data
 @AllArgsConstructor

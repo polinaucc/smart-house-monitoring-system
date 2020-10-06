@@ -56,9 +56,9 @@ public class AdminController {
     /**
      * Instantiates a new Auth controller.
      *
-     * @param userService  the user service
-     * @param houseService the house service
-     * @param roomService  the room service
+     * @param userService   the user service
+     * @param houseService  the house service
+     * @param roomService   the room service
      * @param deviceService the device service
      */
     public AdminController(UserService userService,
@@ -241,6 +241,14 @@ public class AdminController {
         return "index";
     }
 
+    /**
+     * Deletes the room from the house.
+     *
+     * @param roomId id of the room
+     * @param house  id of the house
+     * @param model  the model
+     * @return the redirection to the page with list of house rooms.
+     */
     @GetMapping("/delete-room/{room-id}")
     public String deleteRoom(@PathVariable("room-id") Long roomId,
                              @ModelAttribute("house") House house,
@@ -255,6 +263,12 @@ public class AdminController {
 
     }
 
+    /**
+     * Gets the form for device adding.
+     *
+     * @param model the model
+     * @return the page with form for device adding
+     */
     @GetMapping("/add-device")
     public String getDeviceForm(Model model) {
         model.addAttribute("error", null);
@@ -262,6 +276,16 @@ public class AdminController {
         return "admin/add-device";
     }
 
+    /**
+     * Adds the device to the system.
+     *
+     * @param deviceDto     the device dto that contains information about
+     *                      device we need to save
+     * @param bindingResult the binding result
+     * @param model         the model
+     * @return if all is ok the redirection to the index page,
+     * otherwise - the page for device adding.
+     */
     @PostMapping("/add-device")
     public String addDevice(@Valid @ModelAttribute("deviceDto") DeviceDto deviceDto,
                             BindingResult bindingResult, Model model) {

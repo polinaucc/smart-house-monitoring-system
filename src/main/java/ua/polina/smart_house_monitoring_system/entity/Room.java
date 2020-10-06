@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * The entity for Room presentation.
+ *
+ * @author Polina Serhiienko
  */
 @Data
 @AllArgsConstructor

@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * The entity for house presentation.
+ *
+ * @author Polina Serhiienko
  */
 @Data
 @NoArgsConstructor

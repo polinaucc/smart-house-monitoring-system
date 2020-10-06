@@ -12,6 +12,8 @@ import java.util.Set;
 
 /**
  * The entity for User presentation.
+ *
+ * @author Polina Serhiienko
  */
 @Data
 @NoArgsConstructor

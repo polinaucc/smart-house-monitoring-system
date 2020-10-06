@@ -12,15 +12,42 @@ import ua.polina.smart_house_monitoring_system.service.UserService;
 
 import java.util.List;
 
+/**
+ * The Resident controller. It process residents' and some owners'
+ * requests, since the owner has access to all residents' functions.
+ */
 @Controller
-@RequestMapping(value={"/resident", "/owner"})
+@RequestMapping(value = {"/resident", "/owner"})
 @SessionAttributes(value = {"room", "deviceRoom"})
 public class ResidentController {
+    /**
+     * The user service.
+     */
     private final UserService userService;
+
+    /**
+     * The room service.
+     */
     private final RoomService roomService;
+
+    /**
+     * The device service.
+     */
     private final DeviceService deviceService;
+
+    /**
+     * The device parameter sevvice.
+     */
     private final DeviceParameterService deviceParameterService;
 
+    /**
+     * Instantiates a new Resident controller.
+     *
+     * @param userService            the user service
+     * @param roomService            the room service
+     * @param deviceService          the device service
+     * @param deviceParameterService the device parameter service
+     */
     @Autowired
     public ResidentController(UserService userService, RoomService roomService,
                               DeviceService deviceService,
@@ -31,6 +58,14 @@ public class ResidentController {
         this.deviceParameterService = deviceParameterService;
     }
 
+    /**
+     * Gets rooms of logged in user.
+     *
+     * @param model the model
+     * @param user  the user
+     * @return the page with the list of rooms in the house of logged in user
+     * or index page because of exception.
+     */
     @GetMapping("/my-rooms")
     public String getMyRooms(Model model, @CurrentUser User user) {
         try {
@@ -46,8 +81,16 @@ public class ResidentController {
         }
     }
 
+    /**
+     * Gets devices in room.
+     *
+     * @param roomId the room id
+     * @param model  the model
+     * @return the devices in room
+     */
     @GetMapping("/my-devices/{room-id}")
-    public String getDevicesInRoom(@PathVariable("room-id") Long roomId, Model model) {
+    public String getDevicesInRoom(@PathVariable("room-id") Long roomId,
+                                   Model model) {
         Room room = roomService.getById(roomId);
         model.addAttribute("room", room);
         List<DeviceRoom> deviceRoomList = deviceService.getDevicesByRoom(room);
@@ -56,11 +99,22 @@ public class ResidentController {
         return "devices";
     }
 
+    /**
+     * Gets the page with the list of device parameters.
+     *
+     * @param deviceRoomId the device room id
+     * @param room         the room
+     * @param model        the model
+     * @return the page with the list of device parameters.
+     */
     @GetMapping("/get-parameters/{device-room-id}")
-    public String getDeviceParameters(@PathVariable("device-room-id") Long deviceRoomId,
-                                      @ModelAttribute("room") Room room, Model model) {
+    public String getDeviceParameters(@PathVariable("device-room-id")
+                                              Long deviceRoomId,
+                                      @ModelAttribute("room") Room room,
+                                      Model model) {
         try {
-            DeviceRoom deviceRoom = deviceService.getDeviceRoomById(deviceRoomId);
+            DeviceRoom deviceRoom = deviceService
+                    .getDeviceRoomById(deviceRoomId);
             model.addAttribute("deviceRoom", deviceRoom);
             List<DeviceParameter> deviceParameters
                     = deviceParameterService.getDeviceParametersByDeviceRoom(deviceRoom);
@@ -72,6 +126,11 @@ public class ResidentController {
         }
     }
 
+    /**
+     * Gets the index page.
+     *
+     * @return the index page
+     */
     @GetMapping("/index")
     public String getIndexPage() {
         return "index";

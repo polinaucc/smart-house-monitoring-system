@@ -10,6 +10,8 @@ import javax.persistence.*;
 
 /**
  * The entity for Device presentation.
+ *
+ * @author Polina Serhiienko
  */
 @Data
 @AllArgsConstructor

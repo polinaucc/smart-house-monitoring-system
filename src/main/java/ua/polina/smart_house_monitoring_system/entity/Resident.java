@@ -10,6 +10,8 @@ import java.time.LocalDate;
 
 /**
  * The entity for Resident presentation.
+ *
+ * @author Polina Serhiienko
  */
 @Data
 @AllArgsConstructor

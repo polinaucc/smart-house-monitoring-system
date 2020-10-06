@@ -10,6 +10,8 @@ import javax.persistence.*;
 
 /**
  * The entity for Room parameter.
+ *
+ * @author Polina Serhiienko
  */
 
 @Data

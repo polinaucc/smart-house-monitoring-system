@@ -10,20 +10,47 @@ import ua.polina.smart_house_monitoring_system.service.RoomService;
 
 import java.util.List;
 
+/**
+ * The Room service.
+ */
 @Service
 public class RoomServiceImpl implements RoomService {
+    /**
+     * The Room repository.
+     */
     RoomRepository roomRepository;
 
+    /**
+     * Instantiates a new Room service.
+     *
+     * @param roomRepository the room repository
+     */
     @Autowired
     public RoomServiceImpl(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
     }
 
+    /**
+     * Gets rooms by the house.
+     *
+     * @param house the house
+     * @return the list of rooms
+     */
     @Override
     public List<Room> getRoomsByHouse(House house) {
         return roomRepository.findRoomsByHouse(house);
     }
 
+    /**
+     * Saves a room.
+     *
+     * @param roomDto the room dto that has necessary information to save
+     *                the room.
+     * @param house   the house
+     * @return saved room
+     * @throws IllegalArgumentException if the number of rooms is more than
+     *                                  number of rooms in the house
+     */
     @Override
     public Room saveRoom(RoomDto roomDto, House house) {
         Room room = Room.builder()
@@ -37,6 +64,11 @@ public class RoomServiceImpl implements RoomService {
         return roomRepository.save(room);
     }
 
+    /**
+     * Deletes the room by its id.
+     *
+     * @param roomId the room id
+     */
     @Override
     public void deleteById(Long roomId) {
         if (roomRepository.findById(roomId).isPresent()) {
@@ -45,9 +77,15 @@ public class RoomServiceImpl implements RoomService {
 
     }
 
+    /**
+     * Gets the room by its id.
+     *
+     * @param id the room id
+     * @return the room
+     */
     @Override
     public Room getById(Long id) {
         return roomRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("no.room.with.such.id"));
+                .orElseThrow(() -> new IllegalArgumentException("no.room.with.such.id"));
     }
 }

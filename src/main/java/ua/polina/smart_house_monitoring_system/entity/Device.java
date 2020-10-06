@@ -8,6 +8,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * The Device entity.
+ *
+ * @author Polina Serhiienko
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

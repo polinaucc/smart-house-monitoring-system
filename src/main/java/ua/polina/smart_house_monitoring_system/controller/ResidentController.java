@@ -155,6 +155,15 @@ public class ResidentController {
         return "redirect:/resident/my-devices/" + room.getId();
     }
 
+    @GetMapping("/off-device/{device-room-id}")
+    public String offDevice(@PathVariable("device-room-id") Long deviceRoomId,
+                           @ModelAttribute("room") Room room) {
+        final String uri = "http://localhost:8081/sensor/off-device/";
+        RestTemplate restTemplate = new RestTemplate();
+        Boolean isSuccess = restTemplate.getForObject(uri + deviceRoomId, Boolean.class);
+        return "redirect:/resident/my-devices/" + room.getId();
+    }
+
     @GetMapping("/get-on-devices")
     public String getOnDevices(@ModelAttribute("room") Room room, Model model) {
         final String uri = "http://localhost:8081/sensor/get-on-devices/";

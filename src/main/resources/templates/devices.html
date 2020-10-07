@@ -36,6 +36,11 @@
                th:text="#{on}"></a>
         </td>
         <td>
+            <a th:if="${dr.state==T(ua.polina.smart_house_monitoring_system.entity.State).ON}"
+               th:href="@{/resident/off-device/{device-room-id}(device-room-id=${dr.id})}"
+               th:text="#{off}"></a>
+        </td>
+        <td>
             <a th:href="@{/owner/get-parameters/{device-room-id}(device-room-id=${dr.id})}"
                th:text="#{device.parameters}"></a>
         </td>

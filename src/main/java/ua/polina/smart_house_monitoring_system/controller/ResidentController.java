@@ -94,12 +94,19 @@ public class ResidentController {
     @GetMapping("/my-devices/{room-id}")
     public String getDevicesInRoom(@PathVariable("room-id") Long roomId,
                                    Model model) {
-        Room room = roomService.getById(roomId);
-        model.addAttribute("room", room);
-        List<DeviceRoom> deviceRoomList = deviceService.getDevicesByRoom(room);
-        model.addAttribute("deviceRooms", deviceRoomList);
-        model.addAttribute("error", null);
-        return "devices";
+        try {
+            Room room = roomService.getById(roomId);
+            model.addAttribute("room", room);
+            model.addAttribute("value", false);
+            List<DeviceRoom> deviceRoomList = deviceService.getDevicesByRoom(room);
+            model.addAttribute("deviceRooms", deviceRoomList);
+            model.addAttribute("error", null);
+            return "devices";
+        } catch (IllegalArgumentException e) {
+            //TODO: think what user should see if there is no room with such id
+            return "index";
+        }
+
     }
 
     /**
@@ -139,13 +146,22 @@ public class ResidentController {
         return "index";
     }
 
+    @GetMapping("/on-device/{device-room-id}")
+    public String onDevice(@PathVariable("device-room-id") Long deviceRoomId,
+                           @ModelAttribute("room") Room room) {
+        final String uri = "http://localhost:8081/sensor/on-device/";
+        RestTemplate restTemplate = new RestTemplate();
+        Boolean isSuccess = restTemplate.getForObject(uri + deviceRoomId, Boolean.class);
+        return "redirect:/resident/my-devices/" + room.getId();
+    }
+
     @GetMapping("/get-on-devices")
     public String getOnDevices(@ModelAttribute("room") Room room, Model model) {
         final String uri = "http://localhost:8081/sensor/get-on-devices/";
         RestTemplate restTemplate = new RestTemplate();
         DeviceRoomListApi onDeviceRooms = restTemplate.getForObject(uri + room.getId(),
                 DeviceRoomListApi.class);
-        for (DeviceRoom d: Objects.requireNonNull(onDeviceRooms).getDeviceRoomList()){
+        for (DeviceRoom d : Objects.requireNonNull(onDeviceRooms).getDeviceRoomList()) {
             System.out.println(d);
         }
         return "index";

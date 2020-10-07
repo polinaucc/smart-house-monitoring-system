@@ -19,7 +19,8 @@
     <thead>
     <tr>
         <th th:text="#{device.id}">House id</th>
-        <th th:text="#{device.name}">Size</th>
+        <th th:text="#{device.name}">Name</th>
+        <th th:text="#{device.state}">State</th>
     </tr>
     </thead>
     <tbody>
@@ -28,6 +29,12 @@
         th:alt-title="${iStat.even}? 'even' : 'odd'">
         <td th:text="${dr.device.id}"></td>
         <td th:text="${dr.device.name}"></td>
+        <td th:text="${dr.state==T(ua.polina.smart_house_monitoring_system.entity.State).OFF}?#{off}:#{on}"></td>
+        <td>
+            <a th:if="${dr.state==T(ua.polina.smart_house_monitoring_system.entity.State).OFF}"
+               th:href="@{/resident/on-device/{device-room-id}(device-room-id=${dr.id})}"
+               th:text="#{on}"></a>
+        </td>
         <td>
             <a th:href="@{/owner/get-parameters/{device-room-id}(device-room-id=${dr.id})}"
                th:text="#{device.parameters}"></a>

@@ -44,4 +44,16 @@ public class DeviceRoom {
 
     @Column(name = "off_time")
     private LocalTime offTime;
+
+    @Override
+    public String toString() {
+        return "DeviceRoom{" +
+                "id=" + id +
+                ", room=" + room +
+                ", device=" + device +
+                ", state=" + state +
+                ", onTime=" + onTime +
+                ", offTime=" + offTime +
+                '}';
+    }
 }

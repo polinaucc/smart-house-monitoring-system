@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import ua.polina.smart_house_monitoring_system.api.DeviceRoomListApi;
 import ua.polina.smart_house_monitoring_system.entity.*;
 import ua.polina.smart_house_monitoring_system.service.DeviceParameterService;
 import ua.polina.smart_house_monitoring_system.service.DeviceService;
@@ -11,6 +13,7 @@ import ua.polina.smart_house_monitoring_system.service.RoomService;
 import ua.polina.smart_house_monitoring_system.service.UserService;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The Resident controller. It process residents' and some owners'
@@ -135,4 +138,17 @@ public class ResidentController {
     public String getIndexPage() {
         return "index";
     }
+
+    @GetMapping("/get-on-devices")
+    public String getOnDevices(@ModelAttribute("room") Room room, Model model) {
+        final String uri = "http://localhost:8081/sensor/get-on-devices/";
+        RestTemplate restTemplate = new RestTemplate();
+        DeviceRoomListApi onDeviceRooms = restTemplate.getForObject(uri + room.getId(),
+                DeviceRoomListApi.class);
+        for (DeviceRoom d: Objects.requireNonNull(onDeviceRooms).getDeviceRoomList()){
+            System.out.println(d);
+        }
+        return "index";
+    }
+
 }

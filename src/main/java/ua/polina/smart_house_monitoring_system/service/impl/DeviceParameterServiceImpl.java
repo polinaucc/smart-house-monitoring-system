@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ua.polina.smart_house_monitoring_system.dto.DeviceParameterDto;
 import ua.polina.smart_house_monitoring_system.entity.DeviceParameter;
 import ua.polina.smart_house_monitoring_system.entity.DeviceRoom;
+import ua.polina.smart_house_monitoring_system.exception.OrderException;
 import ua.polina.smart_house_monitoring_system.repository.DeviceParameterRepository;
 import ua.polina.smart_house_monitoring_system.service.DeviceParameterService;
 
@@ -47,7 +48,9 @@ public class DeviceParameterServiceImpl implements DeviceParameterService {
      * @return the device parameter
      */
     @Override
-    public DeviceParameter saveDeviceParameter(DeviceParameterDto deviceParameterDto, DeviceRoom deviceRoom) {
+    public DeviceParameter saveDeviceParameter(DeviceParameterDto deviceParameterDto, DeviceRoom deviceRoom) throws OrderException {
+        if(deviceParameterDto.getMinTheoreticalValue()>deviceParameterDto.getMaxTheoreticalValue())
+            throw new OrderException("min.value.error");
         DeviceParameter deviceParameter = DeviceParameter.builder()
                 .roomDevice(deviceRoom)
                 .name(deviceParameterDto.getName())

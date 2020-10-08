@@ -10,6 +10,7 @@ import ua.polina.smart_house_monitoring_system.dto.DeviceUserDto;
 import ua.polina.smart_house_monitoring_system.entity.Device;
 import ua.polina.smart_house_monitoring_system.entity.DeviceRoom;
 import ua.polina.smart_house_monitoring_system.entity.Room;
+import ua.polina.smart_house_monitoring_system.exception.OrderException;
 import ua.polina.smart_house_monitoring_system.service.DeviceParameterService;
 import ua.polina.smart_house_monitoring_system.service.DeviceService;
 
@@ -123,7 +124,7 @@ public class OwnerController {
             deviceParameterService
                     .saveDeviceParameter(deviceParameterDto, deviceRoom);
             return "redirect:/owner/get-parameters/" + deviceRoom.getId();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | OrderException e) {
             model.addAttribute("error", e.getMessage());
             return "/client/add-device-parameter";
         }

@@ -21,6 +21,7 @@
         <th th:text="#{device.id}">House id</th>
         <th th:text="#{device.name}">Name</th>
         <th th:text="#{device.state}">State</th>
+        <th th:text="#{time.working}">Working time</th>
     </tr>
     </thead>
     <tbody>
@@ -30,6 +31,10 @@
         <td th:text="${dr.device.id}"></td>
         <td th:text="${dr.device.name}"></td>
         <td th:text="${dr.state==T(ua.polina.smart_house_monitoring_system.entity.State).OFF}?#{off}:#{on}"></td>
+        <td
+                th:text="${dr.state==T(ua.polina.smart_house_monitoring_system.entity.State).ON}?${dr.onTime}:' '">
+
+        </td>
         <td>
             <a th:if="${dr.state==T(ua.polina.smart_house_monitoring_system.entity.State).OFF}"
                th:href="@{/resident/on-device/{device-room-id}(device-room-id=${dr.id})}"

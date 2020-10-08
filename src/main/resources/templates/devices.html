@@ -48,7 +48,12 @@
                th:text="#{off}"></a>
         </td>
         <td>
-            <a th:href="@{/owner/get-parameters/{device-room-id}(device-room-id=${dr.id})}"
+            <a th:if="${dr.state==T(ua.polina.smart_house_monitoring_system.entity.State).ON}"
+               th:href="@{/resident/set-up-parameter/{device-room-id}(device-room-id=${dr.id})}"
+               th:text="#{set.up.parameter.value}"></a>
+        </td>
+        <td>
+            <a th:href="@{/resident/get-parameters/{device-room-id}(device-room-id=${dr.id})}"
                th:text="#{device.parameters}"></a>
         </td>
     </tr>
@@ -58,10 +63,7 @@
     <a th:href="@{/owner/add-device}" th:text="#{add.device}"></a>
 </div>
 <div>
-    <a th:href="@{/owner/index}" th:text="#{home}"></a>
-</div>
-<div>
-    <a th:href="@{/resident/get-on-devices}" th:text="#{device.list}"></a>
+    <a th:href="@{/resident/index}" th:text="#{home}"></a>
 </div>
 </body>
 </html>

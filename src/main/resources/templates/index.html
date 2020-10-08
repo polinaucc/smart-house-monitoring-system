@@ -28,7 +28,7 @@
                     <a class="nav-link" th:href="@{/admin/add-device}" th:text="#{add.device}">Add device</a>
                 </li>
                 <li class="nav-item" th:if="${#httpServletRequest.remoteUser!='admin'}">
-                    <a class="nav-link" th:href="@{/owner/my-rooms}" th:text="#{my.rooms}">My rooms</a>
+                    <a class="nav-link" th:href="@{/resident/my-rooms}" th:text="#{my.rooms}">My rooms</a>
                 </li>
 
             </ul>

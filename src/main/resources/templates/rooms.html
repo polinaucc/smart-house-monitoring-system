@@ -39,7 +39,7 @@
             </a>
         </td>
         <td th:if="${#httpServletRequest.remoteUser!='admin'}">
-            <a th:href="@{/owner/my-devices/{room-id}(room-id=${room.id})}"
+            <a th:href="@{/resident/my-devices/{room-id}(room-id=${room.id})}"
                th:text="#{device.list}">
 
             </a>

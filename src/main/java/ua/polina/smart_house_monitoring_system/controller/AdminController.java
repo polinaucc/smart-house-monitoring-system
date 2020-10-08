@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Controller
 @SessionAttributes("house")
-@RequestMapping("/admin/")
+@RequestMapping("/admin")
 public class AdminController {
     /**
      * The User service. It processes requests about users
@@ -109,7 +109,7 @@ public class AdminController {
             return "redirect:/admin/index";
         } catch (DataExistsException ex) {
             model.addAttribute("error", ex.getMessage());
-            return "register-client";
+            return "redirect:/admin/sign-up";
         }
     }
 

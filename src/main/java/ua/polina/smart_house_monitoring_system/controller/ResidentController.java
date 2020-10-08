@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import ua.polina.smart_house_monitoring_system.api.ResponseOnApi;
+import ua.polina.smart_house_monitoring_system.dto.SetUpParameterDto;
 import ua.polina.smart_house_monitoring_system.entity.*;
 import ua.polina.smart_house_monitoring_system.service.DeviceParameterService;
 import ua.polina.smart_house_monitoring_system.service.DeviceService;
@@ -20,7 +21,7 @@ import java.util.List;
  * requests, since the owner has access to all residents' functions.
  */
 @Controller
-@RequestMapping(value = {"/resident", "/owner"})
+@RequestMapping("/resident")
 @SessionAttributes(value = {"room", "deviceRoom"})
 public class ResidentController {
     /**
@@ -39,7 +40,7 @@ public class ResidentController {
     private final DeviceService deviceService;
 
     /**
-     * The device parameter sevvice.
+     * The device parameter sevice.
      */
     private final DeviceParameterService deviceParameterService;
 
@@ -171,4 +172,37 @@ public class ResidentController {
                 uri + deviceRoomId, Boolean.class);
         return "redirect:/resident/my-devices/" + room.getId();
     }
+
+    @GetMapping("/set-up-parameter/{device-room-id}")
+    public String getSetParameterForm(@PathVariable("device-room-id") Long deviceRoomId,
+                                      @ModelAttribute("room") Room room, Model model) {
+        try {
+            DeviceRoom deviceRoom = deviceService.getDeviceRoomById(deviceRoomId);
+            model.addAttribute("deviceRoom", deviceRoom);
+            List<DeviceParameter> deviceParameters = deviceParameterService.getDeviceParametersByDeviceRoom(deviceRoom);
+            model.addAttribute("parameters", deviceParameters);
+            model.addAttribute("setUpParameterDto", new SetUpParameterDto());
+            return "/client/set-parameter";
+        }
+        catch (IllegalArgumentException e){
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/resident/my-devices/" + room.getId();
+        }
+    }
+
+    @PostMapping("/set-up-parameter")
+    public String setUpParameterValue(@ModelAttribute("setUpParameterDto")
+                                              SetUpParameterDto setUpParameterDto,
+                                      @ModelAttribute("room") Room room, Model model) {
+        final String uri = "http://localhost:8081/sensor/set-up-parameter-value";
+        RestTemplate restTemplate = new RestTemplate();
+        DeviceParameter dp = restTemplate.postForObject(uri, setUpParameterDto, DeviceParameter.class);
+        if (dp != null) {
+            return "redirect:/resident/my-devices/" + room.getId();
+        } else {
+           model.addAttribute("no.parameter.with.such.id");
+           return "/client/set-parameter";
+        }
+    }
+
 }

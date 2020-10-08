@@ -29,7 +29,7 @@ public class SignUpDto {
     private String password;
 
     @NotBlank
-    @Pattern(regexp = "^[A-Z][a-z]{4,19}", message = "{first.name.error}")
+    @Pattern(regexp = "^[A-Z][a-z]{3,19}", message = "{first.name.error}")
     private String firstName;
 
     @NotBlank

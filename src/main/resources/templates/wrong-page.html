@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 th:text="#{you.have.no.access.for.this.page}">You have ni access to this page</h1>
+<div th:if="${#httpServletRequest.remoteUser!='admin'}">
+    <a th:href="@{/resident/index}" th:text="#{home}"></a>
+</div>
+<div th:if="${#httpServletRequest.remoteUser=='admin'}">
+    <a th:href="@{/admin/index}" th:text="#{home}"></a>
+</div>
+</body>
+</html>

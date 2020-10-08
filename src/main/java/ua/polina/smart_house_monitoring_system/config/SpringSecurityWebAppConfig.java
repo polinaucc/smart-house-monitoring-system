@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import ua.polina.smart_house_monitoring_system.AccessDeniedHandlerCustom;
 import ua.polina.smart_house_monitoring_system.entity.Role;
 
 /**
@@ -39,32 +40,22 @@ public class SpringSecurityWebAppConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .authorizeRequests()
                 .antMatchers("/owner/**")
-                .access(
-                        "hasAuthority(T(ua.polina"
-                                + ".smart_house_monitoring_system.entity.Role)"
-                                + ".OWNER.getAuthority())");
+                .hasAuthority(Role.OWNER.getAuthority());
 
         httpSecurity
                 .authorizeRequests()
                 .antMatchers("/resident/**")
-                .hasAnyAuthority(Role.OWNER.name(), Role.RESIDENT.name());
-//                .access(
-//                        "hasAuthority(T(ua.polina"
-//                                + ".smart_house_monitoring_system.entity.Role)"
-//                                + ".RESIDENT.getAuthority())");
+                .hasAnyAuthority(Role.OWNER.getAuthority(), Role.RESIDENT.getAuthority());
 
         httpSecurity
                 .authorizeRequests()
                 .antMatchers("/admin/**")
-                .access(
-                        "hasAuthority(T(ua.polina"
-                                + ".smart_house_monitoring_system.entity.Role)"
-                                + ".ADMIN.getAuthority())");
+                .hasAuthority(Role.ADMIN.getAuthority());
 
         httpSecurity
                 .authorizeRequests()
                 .and()
-                .exceptionHandling();
+                .exceptionHandling().accessDeniedHandler(new AccessDeniedHandlerCustom("/wrong-page"));
 
         httpSecurity
                 .authorizeRequests()

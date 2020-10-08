@@ -21,7 +21,7 @@ import java.util.List;
  * requests, since the owner has access to all residents' functions.
  */
 @Controller
-@RequestMapping("/resident")
+@RequestMapping(value = {"/resident", "/owner"})
 @SessionAttributes(value = {"room", "deviceRoom"})
 public class ResidentController {
     /**
@@ -183,8 +183,7 @@ public class ResidentController {
             model.addAttribute("parameters", deviceParameters);
             model.addAttribute("setUpParameterDto", new SetUpParameterDto());
             return "/client/set-parameter";
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "redirect:/resident/my-devices/" + room.getId();
         }
@@ -200,8 +199,8 @@ public class ResidentController {
         if (dp != null) {
             return "redirect:/resident/my-devices/" + room.getId();
         } else {
-           model.addAttribute("no.parameter.with.such.id");
-           return "/client/set-parameter";
+            model.addAttribute("no.parameter.with.such.id");
+            return "/client/set-parameter";
         }
     }
 

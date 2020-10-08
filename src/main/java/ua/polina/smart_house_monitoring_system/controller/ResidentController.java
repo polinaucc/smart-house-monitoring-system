@@ -1,11 +1,12 @@
 package ua.polina.smart_house_monitoring_system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import ua.polina.smart_house_monitoring_system.api.DeviceRoomListApi;
+import ua.polina.smart_house_monitoring_system.api.ResponseOnApi;
 import ua.polina.smart_house_monitoring_system.entity.*;
 import ua.polina.smart_house_monitoring_system.service.DeviceParameterService;
 import ua.polina.smart_house_monitoring_system.service.DeviceService;
@@ -13,7 +14,6 @@ import ua.polina.smart_house_monitoring_system.service.RoomService;
 import ua.polina.smart_house_monitoring_system.service.UserService;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * The Resident controller. It process residents' and some owners'
@@ -76,7 +76,6 @@ public class ResidentController {
             House myHouse = resident.getHouse();
             List<Room> myRooms = roomService.getRoomsByHouse(myHouse);
             model.addAttribute("rooms", myRooms);
-            model.addAttribute("error", null);
             return "rooms";
         } catch (IllegalArgumentException ex) {
             model.addAttribute("error", ex.getMessage());
@@ -97,10 +96,9 @@ public class ResidentController {
         try {
             Room room = roomService.getById(roomId);
             model.addAttribute("room", room);
-            model.addAttribute("value", false);
-            List<DeviceRoom> deviceRoomList = deviceService.getDevicesByRoom(room);
+            List<DeviceRoom> deviceRoomList =
+                    deviceService.getDevicesByRoom(room);
             model.addAttribute("deviceRooms", deviceRoomList);
-            model.addAttribute("error", null);
             return "devices";
         } catch (IllegalArgumentException e) {
             //TODO: think what user should see if there is no room with such id
@@ -148,32 +146,29 @@ public class ResidentController {
 
     @GetMapping("/on-device/{device-room-id}")
     public String onDevice(@PathVariable("device-room-id") Long deviceRoomId,
-                           @ModelAttribute("room") Room room) {
+                           @ModelAttribute("room") Room room, Model model) {
         final String uri = "http://localhost:8081/sensor/on-device/";
         RestTemplate restTemplate = new RestTemplate();
-        Boolean isSuccess = restTemplate.getForObject(uri + deviceRoomId, Boolean.class);
+        ResponseOnApi response = restTemplate.getForObject(
+                uri + deviceRoomId, ResponseOnApi.class);
+        //TODO: how to pass model attribute to the page????
+        if (!response.getIsSuccess()
+                && response.getHttpStatus() == HttpStatus.OK) {
+            model.addAttribute("error", "can.not.on.device");
+        } else if (response.getHttpStatus() == HttpStatus.NOT_FOUND) {
+            model.addAttribute("error", "no.parameter.to.on.device");
+        }
         return "redirect:/resident/my-devices/" + room.getId();
+
     }
 
     @GetMapping("/off-device/{device-room-id}")
     public String offDevice(@PathVariable("device-room-id") Long deviceRoomId,
-                           @ModelAttribute("room") Room room) {
+                            @ModelAttribute("room") Room room) {
         final String uri = "http://localhost:8081/sensor/off-device/";
         RestTemplate restTemplate = new RestTemplate();
-        Boolean isSuccess = restTemplate.getForObject(uri + deviceRoomId, Boolean.class);
+        Boolean isSuccess = restTemplate.getForObject(
+                uri + deviceRoomId, Boolean.class);
         return "redirect:/resident/my-devices/" + room.getId();
     }
-
-    @GetMapping("/get-on-devices")
-    public String getOnDevices(@ModelAttribute("room") Room room, Model model) {
-        final String uri = "http://localhost:8081/sensor/get-on-devices/";
-        RestTemplate restTemplate = new RestTemplate();
-        DeviceRoomListApi onDeviceRooms = restTemplate.getForObject(uri + room.getId(),
-                DeviceRoomListApi.class);
-        for (DeviceRoom d : Objects.requireNonNull(onDeviceRooms).getDeviceRoomList()) {
-            System.out.println(d);
-        }
-        return "index";
-    }
-
 }

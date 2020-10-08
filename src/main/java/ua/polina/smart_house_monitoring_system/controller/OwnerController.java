@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ua.polina.smart_house_monitoring_system.dto.DeviceParameterDto;
 import ua.polina.smart_house_monitoring_system.dto.DeviceUserDto;
 import ua.polina.smart_house_monitoring_system.entity.Device;
@@ -23,6 +20,7 @@ import java.util.List;
  * The Owner controller. It processes requests for owner role.
  */
 @Controller
+@SessionAttributes(value = {"room", "deviceRoom"})
 @RequestMapping("/owner")
 public class OwnerController {
     /**
@@ -77,6 +75,7 @@ public class OwnerController {
                                     DeviceUserDto deviceUserDto,
                             @ModelAttribute("room") Room room, Model model) {
         try {
+            System.out.println(room.getId());
             deviceService.saveDevice(deviceUserDto, room);
             return "redirect:/owner/my-devices/" + room.getId();
         } catch (IllegalArgumentException e) {

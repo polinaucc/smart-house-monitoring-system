@@ -83,8 +83,8 @@ public class ResidentController {
             List<Room> myRooms = roomService.getRoomsByHouse(myHouse);
             model.addAttribute("rooms", myRooms);
             if (EmergencyData.getInstance() != null)
-                model.addAttribute("emergency", EmergencyData.getInstance().message);
-            else model.addAttribute("emergency", null);
+                model.addAttribute("emergencies", EmergencyData.getInstance().messageList.getMessages());
+            else model.addAttribute("emergencies", null);
             return "rooms";
         } catch (IllegalArgumentException ex) {
             model.addAttribute("error", ex.getMessage());
@@ -238,9 +238,17 @@ public class ResidentController {
         return "redirect:/resident/my-rooms";
     }
 
-    @GetMapping("simulate-fire/{room-id}")
-    public String simulateFire(@PathVariable("room-id") Long roomId) {
-        final String uri = "http://localhost:8081/sensor/simulate-fire/";
+    @GetMapping("simulate-flood/{room-id}")
+    public String simulateFlood(@PathVariable("room-id") Long roomId) {
+        final String uri = "http://localhost:8081/sensor/simulate-flood/";
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.getForObject(uri + roomId, String.class);
+        return "redirect:/resident/my-rooms";
+    }
+
+    @GetMapping("simulate-open-window/{room-id}")
+    public String simulateOpenWindow(@PathVariable("room-id") Long roomId) {
+        final String uri = "http://localhost:8081/sensor/simulate-open-window/";
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(uri + roomId, String.class);
         return "redirect:/resident/my-rooms";

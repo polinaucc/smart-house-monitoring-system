@@ -2,21 +2,21 @@ package ua.polina.smart_house_monitoring_system.api;
 
 public class EmergencyData {
     private static EmergencyData instance;
-    public String message;
+    public MessageList messageList;
 
-    private EmergencyData(String message) {
-        this.message = message;
+    private EmergencyData(MessageList messages) {
+        this.messageList = messages;
     }
 
-    public static EmergencyData getInstance(String message) {
-        if(instance == null){
-            instance = new EmergencyData(message);
+    public static EmergencyData getInstance(MessageList messages) {
+        if (instance == null) {
+            instance = new EmergencyData(messages);
         }
-        instance.message=message;
+        instance.messageList = messages;
         return instance;
     }
 
-    public static EmergencyData getInstance(){
+    public static EmergencyData getInstance() {
         return instance;
     }
 }

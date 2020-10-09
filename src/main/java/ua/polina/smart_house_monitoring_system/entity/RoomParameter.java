@@ -27,12 +27,19 @@ public class RoomParameter {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "temparature")
+    private Double temperature;
 
-    @Column(name = "value")
-    private Double value;
+    @Column(name = "humidity")
+    private Double humidity;
 
-    @ManyToOne
+    @Column(name = "smole_level")
+    private Double smokeLevel;
+
+    @Column(name = "waterLevel")
+    private Double waterLevel;
+
+    @OneToOne
+    @JoinColumn(name = "room_id", unique = true)
     private Room room;
 }

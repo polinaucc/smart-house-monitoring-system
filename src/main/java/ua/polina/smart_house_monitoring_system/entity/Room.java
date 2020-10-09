@@ -1,5 +1,6 @@
 package ua.polina.smart_house_monitoring_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,14 +33,16 @@ public class Room {
     @Column(name = "size")
     private Double size;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "house_id")
     private House house;
 
-    @OneToMany(mappedBy = "room")
+    @JsonIgnore
+    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER)
     private List<DeviceRoom> deviceRooms;
 
-    @OneToMany(mappedBy = "room")
-    private List<RoomParameter> roomParameters;
+//    @OneToOne(mappedBy = "room", cascade = CascadeType.ALL)
+//    private RoomParameter roomParameter;
 
 }

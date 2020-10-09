@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <th:block th:insert="fragments/language :: language"/>
+</div>
+<div class="container">
+    <form class="form-signin" th:action="@{/resident/set-up-room-parameters}" th:object="${roomParametersDto}" method="post">
+        <h3 th:text="#{add.room.parameters.form}">Add room parameters form</h3>
+        <div th:if="${error != null}">
+            <p th:text="#{${error}}">...</p>
+        </div>
+        <div class="error" th:if="${#fields.hasErrors('temperature')}" th:errors="*{temperature}">Temperature adding Error</div>
+        <div>
+            <input class="form-control" type="text" th:placeholder="#{placeholder.temperature}" required="" id="temperature"
+                   th:field="*{temperature}"/>
+        </div>
+        <div class="error" th:if="${#fields.hasErrors('humidity')}" th:errors="*{humidity}">Humidity adding Error</div>
+        <div>
+            <input class="form-control" type="text" th:placeholder="#{placeholder.humidity}" required="" id="humidity"
+                   th:field="*{humidity}"/>
+        </div>
+        <div class="error" th:if="${#fields.hasErrors('smokeLevel')}" th:errors="*{smokeLevel}">Smoke level adding Error</div>
+        <div>
+            <input class="form-control" type="text" th:placeholder="#{placeholder.smoke.level}" required="" id="smokeLevel"
+                   th:field="*{smokeLevel}"/>
+        </div>
+        <div class="error" th:if="${#fields.hasErrors('waterLevel')}" th:errors="*{waterLevel}">Water level adding Error</div>
+        <div>
+            <input class="form-control" type="text" th:placeholder="#{placeholder.water.level}" required="" id="waterLevel"
+                   th:field="*{waterLevel}"/>
+        </div>
+        <div>
+            <button class="btn btn-lg btn-primary btn-block" th:text="#{add.device}" type="submit">Add device</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

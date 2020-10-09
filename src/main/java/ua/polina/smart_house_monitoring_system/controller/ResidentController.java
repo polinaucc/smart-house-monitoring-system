@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import ua.polina.smart_house_monitoring_system.api.ResponseOnApi;
+import ua.polina.smart_house_monitoring_system.api.RoomParametersApi;
+import ua.polina.smart_house_monitoring_system.dto.RoomParameterDto;
 import ua.polina.smart_house_monitoring_system.dto.SetUpParameterDto;
 import ua.polina.smart_house_monitoring_system.entity.*;
 import ua.polina.smart_house_monitoring_system.service.DeviceParameterService;
@@ -14,6 +17,7 @@ import ua.polina.smart_house_monitoring_system.service.DeviceService;
 import ua.polina.smart_house_monitoring_system.service.RoomService;
 import ua.polina.smart_house_monitoring_system.service.UserService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -202,6 +206,32 @@ public class ResidentController {
             model.addAttribute("no.parameter.with.such.id");
             return "/client/set-parameter";
         }
+    }
+
+    @GetMapping("/set-up-room-parameters/{room-id}")
+    public String getRoomParametersForm(@PathVariable("room-id") Long roomId, Model model) {
+        try {
+            Room room = roomService.getById(roomId);
+            model.addAttribute("room", room);
+            model.addAttribute("roomParametersDto", new RoomParameterDto());
+            model.addAttribute("error", null);
+            return "/client/set-up-room-parameters";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "client/set-up-room-parameters";
+        }
+    }
+
+    @PostMapping("set-up-room-parameters")
+    public String addRoomParameters(@Valid @ModelAttribute("roomParameterDto") RoomParameterDto roomParameterDto,
+                                    @ModelAttribute("room") Room room, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()){
+            return "redirect:/resident/set-up-room-parameters/" + room.getId();
+        }
+        final String uri = "http://localhost:8081/sensor/set-up-room-parameters";
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.postForObject(uri, new RoomParametersApi(roomParameterDto, room), String.class);
+        return "redirect:/resident/get-room-parameters";
     }
 
 }

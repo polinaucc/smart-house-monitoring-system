@@ -23,7 +23,11 @@
         <th th:text="#{room.id}">House id</th>
         <th th:text="#{placeholder.size}">Size</th>
         <th th:text="#{room.name}">Amount of rooms</th>
-    </tr>
+        <th th:text="#{placeholder.temperature}">Temperature</th>
+        <th th:text="#{placeholder.humidity}">Humidity</th>
+        <th th:text="#{placeholder.smoke.level}">Smoke level</th>
+        <th th:text="#{placeholder.water.level}">Water level</th>
+   </tr>
     </thead>
     <tbody>
     <tr th:each="room, iStat : ${rooms}"
@@ -32,6 +36,10 @@
         <td th:text="${room.id}"></td>
         <td th:text="${room.size}"></td>
         <td th:text="${room.name}"></td>
+        <td th:text="${room.roomParameter!=null}?${room.roomParameter.temperature}:'-' "></td>
+        <td th:text="${room.roomParameter!=null}?${room.roomParameter.humidity}:'-' "></td>
+        <td th:text="${room.roomParameter!=null}?${room.roomParameter.smokeLevel}:'-' "></td>
+        <td th:text="${room.roomParameter!=null}?${room.roomParameter.waterLevel}:'-' "></td>
         <td th:if="${#httpServletRequest.remoteUser=='admin'}">
             <a th:href="@{/admin/delete-room/{room-id}(room-id=${room.id})}"
                th:text="#{delete.room}">
@@ -44,7 +52,7 @@
         </td>
         <td th:if="${#httpServletRequest.remoteUser!='admin'}">
             <a th:href="@{/resident/set-up-room-parameters/{room-id}(room-id=${room.getId()})}"
-            th:text="#{set.up.room.parameters}">
+               th:text="#{set.up.room.parameters}">
                 Set up room parameters
             </a>
         </td>

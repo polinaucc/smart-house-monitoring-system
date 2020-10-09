@@ -231,7 +231,7 @@ public class ResidentController {
         final String uri = "http://localhost:8081/sensor/set-up-room-parameters";
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.postForObject(uri, new RoomParametersApi(roomParameterDto, room), String.class);
-        return "redirect:/resident/get-room-parameters";
+        return "redirect:/resident/my-rooms";
     }
 
 }

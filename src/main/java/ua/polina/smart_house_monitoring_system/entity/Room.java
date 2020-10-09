@@ -42,7 +42,8 @@ public class Room {
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER)
     private List<DeviceRoom> deviceRooms;
 
-//    @OneToOne(mappedBy = "room", cascade = CascadeType.ALL)
-//    private RoomParameter roomParameter;
+    @JsonIgnore
+    @OneToOne(mappedBy = "room", cascade = CascadeType.ALL)
+    private RoomParameter roomParameter;
 
 }

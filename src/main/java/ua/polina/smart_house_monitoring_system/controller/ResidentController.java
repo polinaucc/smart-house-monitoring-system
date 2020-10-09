@@ -225,7 +225,7 @@ public class ResidentController {
     @PostMapping("set-up-room-parameters")
     public String addRoomParameters(@Valid @ModelAttribute("roomParameterDto") RoomParameterDto roomParameterDto,
                                     @ModelAttribute("room") Room room, BindingResult bindingResult, Model model) {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "redirect:/resident/set-up-room-parameters/" + room.getId();
         }
         final String uri = "http://localhost:8081/sensor/set-up-room-parameters";
@@ -234,4 +234,11 @@ public class ResidentController {
         return "redirect:/resident/my-rooms";
     }
 
+    @GetMapping("simulate-fire/{room-id}")
+    public String simulateFire(@PathVariable("room-id") Long roomId) {
+        final String uri = "http://localhost:8081/sensor/simulate-fire/";
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.getForObject(uri + roomId, String.class);
+        return "redirect:/resident/my-rooms";
+    }
 }

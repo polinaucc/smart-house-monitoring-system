@@ -56,6 +56,10 @@
                 Set up room parameters
             </a>
         </td>
+        <td th:if="${#httpServletRequest.remoteUser!='admin'}">
+            <a th:href="@{/resident/simulate-fire/{room-id}(room-id=${room.id})}"
+               th:text="#{fire}">Fire </a>
+        </td>
     </tr>
     </tbody>
 </table>

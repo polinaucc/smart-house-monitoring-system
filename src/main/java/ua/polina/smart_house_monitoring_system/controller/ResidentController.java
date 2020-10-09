@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import ua.polina.smart_house_monitoring_system.api.EmergencyData;
 import ua.polina.smart_house_monitoring_system.api.ResponseOnApi;
 import ua.polina.smart_house_monitoring_system.api.RoomParametersApi;
 import ua.polina.smart_house_monitoring_system.dto.RoomParameterDto;
@@ -26,7 +27,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = {"/resident", "/owner"})
-@SessionAttributes(value = {"room", "deviceRoom"})
+@SessionAttributes(value = {"room", "deviceRoom", "fire"})
 public class ResidentController {
     /**
      * The user service.
@@ -81,6 +82,7 @@ public class ResidentController {
             House myHouse = resident.getHouse();
             List<Room> myRooms = roomService.getRoomsByHouse(myHouse);
             model.addAttribute("rooms", myRooms);
+            model.addAttribute("emergency", EmergencyData.getInstance().message);
             return "rooms";
         } catch (IllegalArgumentException ex) {
             model.addAttribute("error", ex.getMessage());

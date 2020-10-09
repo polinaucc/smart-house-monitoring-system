@@ -75,5 +75,8 @@
 <div th:if="${#httpServletRequest.remoteUser!='admin'}">
     <a th:href="@{/resident/index}" th:text="#{home}"></a>
 </div>
+<div th:if="${emergency != null}">
+    <p th:text="${emergency}">...</p>
+</div>
 </body>
 </html>

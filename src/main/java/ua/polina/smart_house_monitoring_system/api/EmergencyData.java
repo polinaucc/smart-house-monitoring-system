@@ -12,6 +12,7 @@ public class EmergencyData {
         if(instance == null){
             instance = new EmergencyData(message);
         }
+        instance.message=message;
         return instance;
     }
 

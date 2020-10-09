@@ -82,7 +82,9 @@ public class ResidentController {
             House myHouse = resident.getHouse();
             List<Room> myRooms = roomService.getRoomsByHouse(myHouse);
             model.addAttribute("rooms", myRooms);
-            model.addAttribute("emergency", EmergencyData.getInstance().message);
+            if (EmergencyData.getInstance() != null)
+                model.addAttribute("emergency", EmergencyData.getInstance().message);
+            else model.addAttribute("emergency", null);
             return "rooms";
         } catch (IllegalArgumentException ex) {
             model.addAttribute("error", ex.getMessage());

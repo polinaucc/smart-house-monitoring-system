@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The Access denied handler.
+ */
 @AllArgsConstructor
 public class AccessDeniedHandlerCustom implements AccessDeniedHandler {
     private String errorPage;
@@ -18,6 +21,11 @@ public class AccessDeniedHandlerCustom implements AccessDeniedHandler {
         httpServletResponse.sendRedirect(errorPage);
     }
 
+    /**
+     * Sets an error page.
+     *
+     * @param errorPage the error page
+     */
     public void setErrorPage(String errorPage) {
         this.errorPage = errorPage;
     }

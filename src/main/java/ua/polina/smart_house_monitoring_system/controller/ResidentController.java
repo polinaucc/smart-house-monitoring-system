@@ -20,6 +20,7 @@ import ua.polina.smart_house_monitoring_system.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The Resident controller. It process residents' and some owners'
@@ -82,9 +83,12 @@ public class ResidentController {
             House myHouse = resident.getHouse();
             List<Room> myRooms = roomService.getRoomsByHouse(myHouse);
             model.addAttribute("rooms", myRooms);
-            if (EmergencyData.getInstance() != null)
-                model.addAttribute("emergencies", EmergencyData.getInstance().messageList.getMessages());
-            else model.addAttribute("emergencies", null);
+            if (EmergencyData.getInstance() != null) {
+                model.addAttribute("emergencies",
+                        EmergencyData.getInstance().messageList.getMessages());
+            } else {
+                model.addAttribute("emergencies", null);
+            }
             return "rooms";
         } catch (IllegalArgumentException ex) {
             model.addAttribute("error", ex.getMessage());
@@ -133,8 +137,8 @@ public class ResidentController {
             DeviceRoom deviceRoom = deviceService
                     .getDeviceRoomById(deviceRoomId);
             model.addAttribute("deviceRoom", deviceRoom);
-            List<DeviceParameter> deviceParameters
-                    = deviceParameterService.getDeviceParametersByDeviceRoom(deviceRoom);
+            List<DeviceParameter> deviceParameters = deviceParameterService
+                    .getDeviceParametersByDeviceRoom(deviceRoom);
             model.addAttribute("deviceParameters", deviceParameters);
             return "client/device-parameters";
         } catch (IllegalArgumentException e) {
@@ -153,6 +157,14 @@ public class ResidentController {
         return "index";
     }
 
+    /**
+     * Turns on the device.
+     *
+     * @param deviceRoomId the device room id
+     * @param room         the room
+     * @param model        the model
+     * @return the redirection to the page with device list
+     */
     @GetMapping("/on-device/{device-room-id}")
     public String onDevice(@PathVariable("device-room-id") Long deviceRoomId,
                            @ModelAttribute("room") Room room, Model model) {
@@ -160,8 +172,8 @@ public class ResidentController {
         RestTemplate restTemplate = new RestTemplate();
         ResponseOnApi response = restTemplate.getForObject(
                 uri + deviceRoomId, ResponseOnApi.class);
-        //TODO: how to pass model attribute to the page????
-        if (!response.getIsSuccess()
+        //TODO: how to pass model attribute to the page???? Maybe add to singletone?
+        if (!Objects.requireNonNull(response).getIsSuccess()
                 && response.getHttpStatus() == HttpStatus.OK) {
             model.addAttribute("error", "can.not.on.device");
         } else if (response.getHttpStatus() == HttpStatus.NOT_FOUND) {
@@ -171,23 +183,43 @@ public class ResidentController {
 
     }
 
+    /**
+     * Turns off the device.
+     *
+     * @param deviceRoomId the device room id
+     * @param room         the room
+     * @return the redirection to the page with device list
+     */
     @GetMapping("/off-device/{device-room-id}")
     public String offDevice(@PathVariable("device-room-id") Long deviceRoomId,
                             @ModelAttribute("room") Room room) {
         final String uri = "http://localhost:8081/sensor/off-device/";
         RestTemplate restTemplate = new RestTemplate();
-        Boolean isSuccess = restTemplate.getForObject(
+        restTemplate.getForObject(
                 uri + deviceRoomId, Boolean.class);
         return "redirect:/resident/my-devices/" + room.getId();
     }
 
+    /**
+     * Gets the page with the form for setting up device parameters.
+     *
+     * @param deviceRoomId the device room id
+     * @param room         the room
+     * @param model        the model
+     * @return the page with the form for setting up room parameters
+     * or the page with list of devices if device doesn't exist.
+     */
     @GetMapping("/set-up-parameter/{device-room-id}")
-    public String getSetParameterForm(@PathVariable("device-room-id") Long deviceRoomId,
-                                      @ModelAttribute("room") Room room, Model model) {
+    public String getSetParameterForm(@PathVariable("device-room-id")
+                                              Long deviceRoomId,
+                                      @ModelAttribute("room") Room room,
+                                      Model model) {
         try {
-            DeviceRoom deviceRoom = deviceService.getDeviceRoomById(deviceRoomId);
+            DeviceRoom deviceRoom =
+                    deviceService.getDeviceRoomById(deviceRoomId);
             model.addAttribute("deviceRoom", deviceRoom);
-            List<DeviceParameter> deviceParameters = deviceParameterService.getDeviceParametersByDeviceRoom(deviceRoom);
+            List<DeviceParameter> deviceParameters =
+                    deviceParameterService.getDeviceParametersByDeviceRoom(deviceRoom);
             model.addAttribute("parameters", deviceParameters);
             model.addAttribute("setUpParameterDto", new SetUpParameterDto());
             return "/client/set-parameter";
@@ -197,13 +229,23 @@ public class ResidentController {
         }
     }
 
+    /**
+     * Sets up device parameter values.
+     *
+     * @param setUpParameterDto the set up parameter dto
+     * @param room              the room
+     * @param model             the model
+     * @return the redirection to the page with list of devices
+     */
     @PostMapping("/set-up-parameter")
     public String setUpParameterValue(@ModelAttribute("setUpParameterDto")
                                               SetUpParameterDto setUpParameterDto,
-                                      @ModelAttribute("room") Room room, Model model) {
+                                      @ModelAttribute("room") Room room,
+                                      Model model) {
         final String uri = "http://localhost:8081/sensor/set-up-parameter-value";
         RestTemplate restTemplate = new RestTemplate();
-        DeviceParameter dp = restTemplate.postForObject(uri, setUpParameterDto, DeviceParameter.class);
+        DeviceParameter dp = restTemplate.postForObject(
+                uri, setUpParameterDto, DeviceParameter.class);
         if (dp != null) {
             return "redirect:/resident/my-devices/" + room.getId();
         } else {
@@ -212,8 +254,16 @@ public class ResidentController {
         }
     }
 
+    /**
+     * Gets the page with the form for adding room parameters.
+     *
+     * @param roomId the room id
+     * @param model  the model
+     * @return the page with the form for adding room parameters.
+     */
     @GetMapping("/set-up-room-parameters/{room-id}")
-    public String getRoomParametersForm(@PathVariable("room-id") Long roomId, Model model) {
+    public String getRoomParametersForm(@PathVariable("room-id") Long roomId,
+                                        Model model) {
         try {
             Room room = roomService.getById(roomId);
             model.addAttribute("room", room);
@@ -226,18 +276,36 @@ public class ResidentController {
         }
     }
 
+    /**
+     * Adds room parameters.
+     *
+     * @param roomParameterDto the room parameter dto
+     * @param room             the room
+     * @param bindingResult    the binding result
+     * @param model            the model
+     * @return the redirection to the page with room list
+     */
     @PostMapping("set-up-room-parameters")
-    public String addRoomParameters(@Valid @ModelAttribute("roomParameterDto") RoomParameterDto roomParameterDto,
-                                    @ModelAttribute("room") Room room, BindingResult bindingResult, Model model) {
+    public String addRoomParameters(@Valid @ModelAttribute("roomParameterDto")
+                                            RoomParameterDto roomParameterDto,
+                                    @ModelAttribute("room") Room room,
+                                    BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "redirect:/resident/set-up-room-parameters/" + room.getId();
         }
         final String uri = "http://localhost:8081/sensor/set-up-room-parameters";
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.postForObject(uri, new RoomParametersApi(roomParameterDto, room), String.class);
+        restTemplate.postForObject(uri, new RoomParametersApi(
+                roomParameterDto, room), String.class);
         return "redirect:/resident/my-rooms";
     }
 
+    /**
+     * Simulates flood. Sets up room parameters like parameters when flood.
+     *
+     * @param roomId the room id
+     * @return the redirection to the page with room list.
+     */
     @GetMapping("simulate-flood/{room-id}")
     public String simulateFlood(@PathVariable("room-id") Long roomId) {
         final String uri = "http://localhost:8081/sensor/simulate-flood/";
@@ -246,6 +314,13 @@ public class ResidentController {
         return "redirect:/resident/my-rooms";
     }
 
+    /**
+     * Simulate an open window. Sets up room parameters like parameters when
+     * open window.
+     *
+     * @param roomId the room id
+     * @return the redirection to the page with room list.
+     */
     @GetMapping("simulate-open-window/{room-id}")
     public String simulateOpenWindow(@PathVariable("room-id") Long roomId) {
         final String uri = "http://localhost:8081/sensor/simulate-open-window/";

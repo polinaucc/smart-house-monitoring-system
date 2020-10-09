@@ -6,21 +6,24 @@ import org.springframework.format.annotation.NumberFormat;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+/**
+ * The dto for room parameter object.
+ */
 @Data
 public class RoomParameterDto {
     @NumberFormat
-    public Double temperature;
+    private Double temperature;
 
     @NumberFormat
     @Min(value = 0, message = "min.value.error")
     @Max(value = 100, message = "max.value.error")
-    public Double humidity;
+    private Double humidity;
 
     @Min(value = 0, message = "min.value.error")
     @Max(value = 100, message = "max.value.error")
-    public Double smokeLevel;
+    private Double smokeLevel;
 
     @Min(value = 0, message = "min.value.error")
     @Max(value = 100, message = "max.value.error")
-    public Double waterLevel;
+    private Double waterLevel;
 }

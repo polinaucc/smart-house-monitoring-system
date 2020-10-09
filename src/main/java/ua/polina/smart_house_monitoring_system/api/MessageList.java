@@ -6,9 +6,15 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * The type Message list.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class MessageList {
+    /**
+     * The Messages.
+     */
     List<String> messages;
 }

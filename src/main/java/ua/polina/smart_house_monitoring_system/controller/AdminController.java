@@ -109,7 +109,7 @@ public class AdminController {
             return "redirect:/admin/index";
         } catch (DataExistsException ex) {
             model.addAttribute("error", ex.getMessage());
-            return "redirect:/admin/sign-up";
+            return "register-client";
         }
     }
 

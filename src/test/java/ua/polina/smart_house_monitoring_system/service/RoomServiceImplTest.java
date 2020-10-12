@@ -46,7 +46,7 @@ public class RoomServiceImplTest {
 
         roomDto = RoomDto.builder()
                 .name("Гостинная")
-                .size(10.5)
+                .roomSize(10.5)
                 .build();
 
         Room room1 = Room.builder()

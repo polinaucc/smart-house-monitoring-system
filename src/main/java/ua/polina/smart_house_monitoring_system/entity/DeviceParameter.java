@@ -26,7 +26,7 @@ public class DeviceParameter {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "room_device_id")
     private DeviceRoom roomDevice;
 

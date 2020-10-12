@@ -29,6 +29,6 @@ public class Device {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "device")
+    @OneToMany(mappedBy = "device", cascade = CascadeType.REMOVE)
     private List<DeviceRoom> deviceRooms;
 }

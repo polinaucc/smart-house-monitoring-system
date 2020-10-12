@@ -55,7 +55,7 @@ public class RoomServiceImpl implements RoomService {
     public Room saveRoom(RoomDto roomDto, House house) {
         Room room = Room.builder()
                 .name(roomDto.getName())
-                .size(roomDto.getSize())
+                .size(roomDto.getRoomSize())
                 .house(house)
                 .build();
         if (house.getAmountOfRooms().equals(roomRepository.countRoomsByHouse(house))) {

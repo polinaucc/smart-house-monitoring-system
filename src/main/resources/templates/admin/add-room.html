@@ -21,11 +21,11 @@
             <input class="form-control" type="text" th:placeholder="#{room.name}" required="" id="roomName"
                    th:field="*{name}"/>
         </div>
-        <div th:if="${#fields.hasErrors('size')}" th:errors="*{size}">Size Error</div>
+        <div th:if="${#fields.hasErrors('roomSize')}" th:errors="*{roomSize}">Size Error</div>
         <div>
             <input class="form-control" type="text" th:placeholder="#{placeholder.size}" required=""
                    id="size"
-                   th:field="*{size}"/>
+                   th:field="*{roomSize}"/>
         </div>
 
         <div>

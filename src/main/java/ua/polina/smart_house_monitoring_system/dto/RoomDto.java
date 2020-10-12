@@ -22,5 +22,5 @@ public class RoomDto {
 
     @Min(1)
     @NumberFormat
-    Double size;
+    Double roomSize;
 }

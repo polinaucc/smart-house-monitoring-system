@@ -39,7 +39,7 @@ public class RoomParameter {
     @Column(name = "waterLevel")
     private Double waterLevel;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "room_id", unique = true)
     private Room room;
 }

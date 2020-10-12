@@ -39,11 +39,11 @@ public class Room {
     private House house;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<DeviceRoom> deviceRooms;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "room", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "room", cascade = CascadeType.REMOVE)
     private RoomParameter roomParameter;
 
 }

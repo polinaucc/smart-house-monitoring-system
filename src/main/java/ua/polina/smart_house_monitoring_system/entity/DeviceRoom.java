@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalTime;
+import java.util.List;
 
 /**
  * The entity for presentation of device in the room.
@@ -27,6 +30,7 @@ public class DeviceRoom {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @OnDelete(      action = OnDeleteAction.CASCADE)
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
@@ -44,6 +48,9 @@ public class DeviceRoom {
 
     @Column(name = "off_time")
     private LocalTime offTime;
+
+    @OneToMany(mappedBy = "roomDevice", cascade = CascadeType.ALL)
+    private List<DeviceParameter> deviceParameters;
 
     @Override
     public String toString() {

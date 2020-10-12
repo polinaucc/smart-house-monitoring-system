@@ -177,9 +177,9 @@ public class ResidentController {
         RestTemplate restTemplate = new RestTemplate();
         ResponseOnApi response = restTemplate.getForObject(
                 uri + deviceRoomId, ResponseOnApi.class);
-        //TODO: how to pass model attribute to the page???? Maybe add to singletone?
         if (!Objects.requireNonNull(response).getIsSuccess()
                 && response.getHttpStatus() == HttpStatus.OK) {
+            //TODO: how to pass this model attribute to the page???? Maybe add to singletone?
             model.addAttribute("error", "can.not.on.device");
         } else if (response.getHttpStatus() == HttpStatus.NOT_FOUND) {
             model.addAttribute("error", "no.parameter.to.on.device");

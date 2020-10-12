@@ -1,5 +1,6 @@
 package ua.polina.smart_house_monitoring_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,9 +37,11 @@ public class House {
     @Column(name = "amount_of_rooms")
     private Integer amountOfRooms;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "house")
     private List<Room> rooms;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "house")
     private List<Resident> residents;
 

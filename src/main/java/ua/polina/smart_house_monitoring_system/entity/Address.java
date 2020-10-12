@@ -1,5 +1,6 @@
 package ua.polina.smart_house_monitoring_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,6 +45,7 @@ public class Address {
     @Column(name = "flat_number")
     private String flatNumber;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "address", cascade = CascadeType.ALL)
     private House house;
 

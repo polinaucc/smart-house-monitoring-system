@@ -2,12 +2,14 @@ package ua.polina.smart_house_monitoring_system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import ua.polina.smart_house_monitoring_system.api.EmergencyData;
+import ua.polina.smart_house_monitoring_system.api.MessageList;
 import ua.polina.smart_house_monitoring_system.api.ResponseOnApi;
 import ua.polina.smart_house_monitoring_system.api.RoomParametersApi;
 import ua.polina.smart_house_monitoring_system.dto.RoomParameterDto;
@@ -28,7 +30,7 @@ import java.util.Objects;
  */
 @Controller
 @RequestMapping(value = {"/resident", "/owner"})
-@SessionAttributes(value = {"room", "deviceRoom", "fire"})
+@SessionAttributes(value = {"room", "deviceRoom", "house"})
 public class ResidentController {
     /**
      * The user service.
@@ -49,6 +51,7 @@ public class ResidentController {
      * The device parameter sevice.
      */
     private final DeviceParameterService deviceParameterService;
+    House house;
 
     /**
      * Instantiates a new Resident controller.
@@ -81,6 +84,8 @@ public class ResidentController {
         try {
             Resident resident = userService.getResidentByUser(user);
             House myHouse = resident.getHouse();
+            house = myHouse;
+            model.addAttribute("house", myHouse);
             List<Room> myRooms = roomService.getRoomsByHouse(myHouse);
             model.addAttribute("rooms", myRooms);
             if (EmergencyData.getInstance() != null) {
@@ -301,6 +306,21 @@ public class ResidentController {
     }
 
     /**
+     * Simulate a fire. Sets up room parameters like parameters when
+     * a fire.
+     *
+     * @param roomId the room id
+     * @return the redirection to the page with room list.
+     */
+    @GetMapping("simulate-fire/{room-id}")
+    public String simulateFire(@PathVariable("room-id") Long roomId) {
+        final String uri = "http://localhost:8081/sensor/simulate-fire/";
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.getForObject(uri + roomId, String.class);
+        return "redirect:/resident/my-rooms";
+    }
+
+    /**
      * Simulates flood. Sets up room parameters like parameters when flood.
      *
      * @param roomId the room id
@@ -327,5 +347,19 @@ public class ResidentController {
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(uri + roomId, String.class);
         return "redirect:/resident/my-rooms";
+    }
+
+    /**
+     * Checks the house for emergencies each 10 sec.
+     */
+    @Scheduled(cron = "10 * * * * * ")
+    public void check() {
+        final String uri = "http://localhost:8081/sensor/check";
+        RestTemplate restTemplate = new RestTemplate();
+        if (house != null) {
+            MessageList response = restTemplate.postForObject(
+                    uri, house, MessageList.class);
+            EmergencyData.getInstance(response);
+        }
     }
 }

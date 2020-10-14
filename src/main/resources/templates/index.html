@@ -2,21 +2,23 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/app-style.css}">
+    <title>Title</title>
 </head>
 <body>
-<div style="display: inline-block">
+<div style="display: inline-block; width: 100%" >
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#"><strong>Smart home</strong></a>
         <div style="width: 98vw" class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
+                <li class="nav-item" th:if="${#httpServletRequest.remoteUser!=null}">
+                    <a class="nav-link" th:href="@{/logout}" th:text="#{log.out}">Log out</a>
+                </li>
                 <li class="nav-item" th:if="${#httpServletRequest.remoteUser=='admin'}">
                     <a class="nav-link" th:href="@{/admin/sign-up}" th:text="#{add.user}">Register user for the
                         system</a>
-                </li>
-                <li class="nav-item" th:if="${#httpServletRequest.remoteUser!=null}">
-                    <a class="nav-link" th:href="@{/logout}" th:text="#{log.out}">Log out</a>
                 </li>
                 <li class="nav-item" th:if="${#httpServletRequest.remoteUser=='admin'}">
                     <a class="nav-link" th:href="@{/admin/add-house}" th:text="#{add.house}">Add house</a>
@@ -30,21 +32,25 @@
                 <li class="nav-item" th:if="${#httpServletRequest.remoteUser!='admin'}">
                     <a class="nav-link" th:href="@{/resident/my-rooms}" th:text="#{my.rooms}">My rooms</a>
                 </li>
-
             </ul>
-            <div class="lang2">
+            <div>
                 <div th:fragment="language">
                     <a th:href="@{''(lang=en)}" th:text="#{language.eng}">EN</a>
                     |
                     <a th:href="@{''(lang=uk)}" th:text="#{language.ru}">RU</a>
                 </div>
-                <div th:if="${#httpServletRequest.remoteUser!=null}">
+                <div style="text-align: center" th:if="${#httpServletRequest.remoteUser!=null}">
                     [[${#httpServletRequest.remoteUser}]]
                 </div>
             </div>
-
         </div>
     </nav>
 </div>
+<header class="page-header header container-fluid">
+    <div class="description">
+        <h1 th:text="#{welcome}">Welcome to our Website!</h1>
+        <p th:text="#{welcome.description}"></p>
+    </div>
+</header>
 </body>
 </html>

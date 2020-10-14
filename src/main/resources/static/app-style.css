@@ -1,0 +1,33 @@
+.header {
+    background-image: url("https://image.shutterstock.com/z/stock-vector-smart-home-automation-vector-background-icons-symbols-for-various-devices-and-sensors-light-273793955.jpg");
+    background-position: center;
+    position: relative;
+    height: 90vh;
+    width: 100vw;
+}
+.description {
+    left: 50%;
+    position: absolute;
+    top: 45%;
+    transform: translate(-50%, -55%);
+    text-align: center;
+}
+.description h1 {
+    color: yellow;
+}
+.description p {
+    color: black;
+    font-size: 1.3rem;
+    line-height: 1.5;
+}
+.description button {
+    border:1px solid yellow;
+    background:yellow;
+    border-radius: 0;
+    color:black;
+}
+.description button:hover {
+    border:1px solid #fff;
+    background:#fff;
+    color:#000;
+}

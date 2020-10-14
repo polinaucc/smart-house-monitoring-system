@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Requests</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -59,10 +59,10 @@
     </tr>
     </tbody>
 </table>
-<div>
+<div sec:authorize="hasRole('OWNER')">
     <a th:href="@{/owner/add-device}" th:text="#{add.device}"></a>
 </div>
-<div>
+<div sec:authorize="hasRole('OWNER')">
     <a th:href="@{/resident/index}" th:text="#{home}"></a>
 </div>
 </body>

@@ -1,5 +1,6 @@
 package ua.polina.smart_house_monitoring_system.service.impl;
 
+import org.decimal4j.util.DoubleRounder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.polina.smart_house_monitoring_system.dto.HouseDto;
@@ -96,7 +97,8 @@ public class HouseServiceImpl implements HouseService {
     public House updateSize(House house, List<Room> roomsInHouse) {
         house.setSize(0.0);
         for (Room r : roomsInHouse) {
-            house.setSize(house.getSize() + r.getSize());
+            house.setSize(DoubleRounder.round(
+                    house.getSize() + r.getSize(), 2));
         }
         return houseRepository.save(house);
     }

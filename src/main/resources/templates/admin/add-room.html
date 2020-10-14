@@ -24,7 +24,7 @@
         <div th:if="${#fields.hasErrors('roomSize')}" th:errors="*{roomSize}">Size Error</div>
         <div>
             <input class="form-control" type="text" th:placeholder="#{placeholder.size}" required=""
-                   id="size"
+                   id="roomSize"
                    th:field="*{roomSize}"/>
         </div>
 

@@ -215,11 +215,11 @@ public class AdminController {
      * otherwise the page with the form for room adding
      */
     @PostMapping("/add-room")
-    public String addRoom(@Valid @ModelAttribute("roomDto") RoomDto roomDto,
+    public String addRoom(@ModelAttribute("roomDto") @Valid RoomDto roomDto,
+                          BindingResult bindingResult,
                           @ModelAttribute("house") House house,
-                          BindingResult bindingResult, Model model) {
+                          Model model) {
         if (bindingResult.hasErrors()) {
-            //TODO: add to the form message of NumberFormat annotation (typeMismatch)
             return "/admin/add-room";
         }
         try {

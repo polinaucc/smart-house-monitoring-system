@@ -17,10 +17,10 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomDto {
-    @NotBlank
+    @NotBlank(message = "{name.not.blank}")
     String name;
 
-    @Min(1)
+    @Min(value = 1, message = "{more.than.one}")
     @NumberFormat
     Double roomSize;
 }

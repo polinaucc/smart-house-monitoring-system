@@ -1,5 +1,7 @@
 package ua.polina.smart_house_monitoring_system.controller;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +18,9 @@ import ua.polina.smart_house_monitoring_system.service.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * Controller which processes admin requests.
@@ -29,29 +34,36 @@ public class AdminController {
      * from controller to database and vice versa.
      */
     private final UserService userService;
-
     /**
      * The house service. It processes requests about houses
      * from controller to database and vice versa.
      */
     private final HouseService houseService;
-
     /**
      * The room service. It processes requests about rooms
      * from controller to database and vice versa.
      */
     private final RoomService roomService;
-
     /**
      * The address service. It processes requests about adresses
      * from controller to database and vice versa.
      */
     private final AddressService addressService;
-
     /**
      * The device service.
      */
     private final DeviceService deviceService;
+
+    /**
+     * Logger field.
+     */
+    private static final Logger LOGGER = LogManager.getLogger(
+            AdminController.class);
+
+    /**
+     * Resource bundle field for localization error messages
+     */
+    private ResourceBundle rb;
 
     /**
      * Instantiates a new Auth controller.
@@ -71,6 +83,8 @@ public class AdminController {
         this.roomService = roomService;
         this.addressService = addressService;
         this.deviceService = deviceService;
+        rb = ResourceBundle.getBundle(
+                "messages", new Locale("en", "UK"));
     }
 
     /**
@@ -296,6 +310,7 @@ public class AdminController {
             deviceService.saveDevice(deviceDto);
             return "redirect:/admin/index";
         } catch (DataExistsException e) {
+            LOGGER.error(rb.getString(Objects.requireNonNull(e.getMessage())));
             model.addAttribute("error", e.getMessage());
             return "/admin/add-device";
         }

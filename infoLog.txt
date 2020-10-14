@@ -1,0 +1,1 @@
+ERROR   14.10.2020 12:22:50 ua.polina.smart_house_monitoring_system.controller.AdminController - Device with such name already exits

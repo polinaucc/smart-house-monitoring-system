@@ -8,12 +8,12 @@
     <title>Title</title>
 </head>
 <body>
-<div>
-    <th:block th:insert="fragments/language :: language"/>
-</div>
 <div class="container">
     <form class="form-signin" th:action="@{/admin/add-device}" th:object="${deviceDto}" method="post">
-            <h3 th:text="#{add.device.form}">Add device form</h3>
+        <div>
+            <th:block th:insert="fragments/language :: language"/>
+        </div>
+        <h3 th:text="#{add.device.form}">Add device form</h3>
         <div th:if="${error != null}">
             <p th:text="#{${error}}">...</p>
         </div>

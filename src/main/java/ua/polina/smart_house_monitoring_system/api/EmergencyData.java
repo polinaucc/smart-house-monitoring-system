@@ -2,6 +2,7 @@ package ua.polina.smart_house_monitoring_system.api;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * The SingleTone Emergency data. It saves messages about emergencies in
@@ -37,10 +38,11 @@ public class EmergencyData {
             instance = new EmergencyData(messages);
         }
         instance.messageList = messages;
-        if (messages != null && messages.messages!=null) {
+        if (messages != null && messages.messages != null) {
             for (String mes : messages.messages
             ) {
-                LOGGER.warn(mes);
+                LOGGER.warn(SecurityContextHolder.getContext()
+                        .getAuthentication().getName() + " " + mes);
             }
         }
         return instance;

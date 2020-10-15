@@ -32,7 +32,7 @@ Also he/she cah add standard domestic appliances` names.
 4. Run `mvn spring-boot:run` from project root folder
 5. The project will start on 8080 port. Use http://localhost:8080/ to view web application
 
-Pay your attention that this project will be work correct only with the project:
+Pay your attention that this project will work correct only with the project:
 https://github.com/polinaucc/smart-house-sensors, otherwise you will have 500 error when check for emergencies.
 
 ## Main Technologies and Instruments

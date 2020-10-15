@@ -28,3 +28,6 @@ INFO    15.10.2020 14:56:47 - admin logged in the system
 INFO    15.10.2020 14:59:43 - admin logged in the system
 INFO    15.10.2020 15:02:52 - admin logged in the system
 INFO    15.10.2020 15:03:00 - admin views all houses in the system
+INFO    15.10.2020 15:32:25 - user1 logged in the system
+INFO    15.10.2020 15:32:40 - user1 simulates an open window in the room with id: 54
+INFO    15.10.2020 15:32:43 - user1 simulates an open window in the room with id: 65

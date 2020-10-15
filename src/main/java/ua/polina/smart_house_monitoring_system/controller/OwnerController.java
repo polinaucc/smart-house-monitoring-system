@@ -1,5 +1,7 @@
 package ua.polina.smart_house_monitoring_system.controller;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,15 +9,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.polina.smart_house_monitoring_system.dto.DeviceParameterDto;
 import ua.polina.smart_house_monitoring_system.dto.DeviceUserDto;
-import ua.polina.smart_house_monitoring_system.entity.Device;
-import ua.polina.smart_house_monitoring_system.entity.DeviceRoom;
-import ua.polina.smart_house_monitoring_system.entity.Room;
+import ua.polina.smart_house_monitoring_system.entity.*;
 import ua.polina.smart_house_monitoring_system.exception.OrderException;
 import ua.polina.smart_house_monitoring_system.service.DeviceParameterService;
 import ua.polina.smart_house_monitoring_system.service.DeviceService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * The Owner controller. It processes requests for owner role.
@@ -25,14 +27,21 @@ import java.util.List;
 @RequestMapping("/owner")
 public class OwnerController {
     /**
+     * The Logger.
+     */
+    private static final Logger LOGGER = LogManager.getLogger(OwnerController.class);
+    /**
      * The device service.
      */
     private final DeviceService deviceService;
-
     /**
      * The device parameter service.
      */
     private final DeviceParameterService deviceParameterService;
+    /**
+     * Resource bundle field for localization error messages
+     */
+    private ResourceBundle rb;
 
     /**
      * Instantiates a new Owner controller.
@@ -45,6 +54,8 @@ public class OwnerController {
                            DeviceParameterService deviceParameterService) {
         this.deviceService = deviceService;
         this.deviceParameterService = deviceParameterService;
+        rb = ResourceBundle.getBundle(
+                "messages", new Locale("en", "UK"));
     }
 
     /**
@@ -74,12 +85,16 @@ public class OwnerController {
     @PostMapping("/add-device")
     public String addDevice(@ModelAttribute("deviceDto")
                                     DeviceUserDto deviceUserDto,
-                            @ModelAttribute("room") Room room, Model model) {
+                            @ModelAttribute("room") Room room, @CurrentUser User user,
+                            Model model) {
         try {
-            System.out.println(room.getId());
-            deviceService.saveDevice(deviceUserDto, room);
+            DeviceRoom deviceInRoom = deviceService.saveDevice(deviceUserDto, room);
+            LOGGER.info(user.getUsername() + " added new device: "
+                    + deviceInRoom.getDevice().getName() + " to the room: "
+                    + deviceInRoom.getRoom().getName());
             return "redirect:/owner/my-devices/" + room.getId();
         } catch (IllegalArgumentException e) {
+            LOGGER.error(user.getUsername() + rb.getString(e.getMessage()));
             model.addAttribute("error", e.getMessage());
             return "client/add-device";
         }
@@ -115,16 +130,22 @@ public class OwnerController {
                                        DeviceParameterDto deviceParameterDto,
                                @ModelAttribute("deviceRoom") DeviceRoom deviceRoom,
                                @ModelAttribute("room") Room room,
-                               BindingResult bindingResult,
+                               BindingResult bindingResult, @CurrentUser User user,
                                Model model) {
         if (bindingResult.hasErrors()) {
             return "/client/add-device-parameter";
         }
         try {
-            deviceParameterService
+            DeviceParameter deviceParameter = deviceParameterService
                     .saveDeviceParameter(deviceParameterDto, deviceRoom);
+            LOGGER.info(user.getUsername() + " added parameter: "
+                    + deviceParameter.getName() + " to the device: "
+                    + deviceParameter.getRoomDevice().getDevice()
+                    + " in the room: "
+                    + deviceParameter.getRoomDevice().getRoom());
             return "redirect:/owner/get-parameters/" + deviceRoom.getId();
         } catch (IllegalArgumentException | OrderException e) {
+            LOGGER.error(user.getUsername() + rb.getString(e.getMessage()));
             model.addAttribute("error", e.getMessage());
             return "/client/add-device-parameter";
         }

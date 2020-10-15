@@ -1,5 +1,7 @@
 package ua.polina.smart_house_monitoring_system.controller;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,8 @@ import ua.polina.smart_house_monitoring_system.entity.Role;
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
+
+    private static final Logger LOGGER = LogManager.getLogger(AuthController.class);
     /**
      * Gets login. Clears messages about emergencies in the house of previous
      * logged in user.
@@ -47,6 +51,7 @@ public class AuthController {
      */
     @RequestMapping("/default-success")
     public String getSuccessPage(Model model) {
+        LOGGER.info(SecurityContextHolder.getContext().getAuthentication().getName() + " logged in the system");
         if (SecurityContextHolder.getContext().getAuthentication()
                 .getAuthorities().contains(Role.ADMIN)) {
             return "redirect:/admin/index";

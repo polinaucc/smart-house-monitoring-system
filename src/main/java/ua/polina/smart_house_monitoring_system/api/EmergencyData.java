@@ -1,10 +1,17 @@
 package ua.polina.smart_house_monitoring_system.api;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 /**
  * The SingleTone Emergency data. It saves messages about emergencies in
  * the house.
  */
 public class EmergencyData {
+    /**
+     * The Logger for emergencies
+     */
+    private static final Logger LOGGER = LogManager.getLogger(EmergencyData.class);
     /**
      * EmergencyData instance.
      */
@@ -30,6 +37,12 @@ public class EmergencyData {
             instance = new EmergencyData(messages);
         }
         instance.messageList = messages;
+        if (messages != null && messages.messages!=null) {
+            for (String mes : messages.messages
+            ) {
+                LOGGER.warn(mes);
+            }
+        }
         return instance;
     }
 

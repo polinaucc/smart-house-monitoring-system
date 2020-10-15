@@ -30,6 +30,11 @@ import java.util.ResourceBundle;
 @RequestMapping("/admin")
 public class AdminController {
     /**
+     * Logger field.
+     */
+    private static final Logger LOGGER = LogManager.getLogger(
+            AdminController.class);
+    /**
      * The User service. It processes requests about users
      * from controller to database and vice versa.
      */
@@ -53,13 +58,6 @@ public class AdminController {
      * The device service.
      */
     private final DeviceService deviceService;
-
-    /**
-     * Logger field.
-     */
-    private static final Logger LOGGER = LogManager.getLogger(
-            AdminController.class);
-
     /**
      * Resource bundle field for localization error messages
      */
@@ -120,8 +118,10 @@ public class AdminController {
         }
         try {
             userService.saveNewResident(signUpDto);
+            LOGGER.info("admin registered user: " + signUpDto.getUsername());
             return "redirect:/admin/index";
         } catch (DataExistsException ex) {
+            LOGGER.error("admin " + rb.getString(ex.getMessage()));
             model.addAttribute("error", ex.getMessage());
             return "register-client";
         }
@@ -157,8 +157,10 @@ public class AdminController {
         }
         try {
             House house = houseService.addNewHouse(houseDto);
+            LOGGER.info("admin added a new house");
             return "redirect:/admin/rooms/" + house.getId();
         } catch (DataExistsException ex) {
+            LOGGER.error("admin" + rb.getString(ex.getMessage()));
             model.addAttribute("error", ex.getMessage());
             return "admin/add-house";
         }
@@ -174,6 +176,7 @@ public class AdminController {
     public String getHouses(Model model) {
         List<House> houses = houseService.getAllHouses();
         model.addAttribute("houses", houses);
+        LOGGER.info("admin views all houses in the system");
         return "admin/houses";
     }
 
@@ -196,8 +199,10 @@ public class AdminController {
                 model.addAttribute("error", "empty.list");
             }
             houseService.updateSize(house, roomsInHouse);
+            LOGGER.info("admin views all rooms in the house: " + house);
             return "rooms";
         } catch (IllegalArgumentException ex) {
+            LOGGER.error("admin " + rb.getString(ex.getMessage()));
             model.addAttribute("error", ex.getMessage());
             return "rooms";
         }
@@ -238,8 +243,10 @@ public class AdminController {
         }
         try {
             roomService.saveRoom(roomDto, house);
+            LOGGER.info("admin saved new room to the house: " + house);
             return "redirect:/admin/rooms/" + house.getId();
         } catch (IllegalArgumentException e) {
+            LOGGER.info("admin " + rb.getString(e.getMessage()));
             model.addAttribute("error", e.getMessage());
             return "/admin/add-room";
         }
@@ -269,6 +276,7 @@ public class AdminController {
                              Model model) {
         try {
             roomService.deleteById(roomId);
+            LOGGER.info("admin deleted the room with id: " + roomId);
             return "redirect:/admin/rooms/" + house.getId();
         } catch (IllegalArgumentException ex) {
             model.addAttribute("error", ex.getMessage());
@@ -308,14 +316,13 @@ public class AdminController {
         }
         try {
             deviceService.saveDevice(deviceDto);
+            LOGGER.info("admin added new device: " + deviceDto.getName());
             return "redirect:/admin/index";
         } catch (DataExistsException e) {
-            LOGGER.error(rb.getString(Objects.requireNonNull(e.getMessage())));
+            LOGGER.error("admin " + rb.getString(Objects.requireNonNull(
+                    e.getMessage())) + deviceDto.getName());
             model.addAttribute("error", e.getMessage());
             return "/admin/add-device";
         }
     }
-
-    //TODO: delete house
-    //TODO: update rooms
 }

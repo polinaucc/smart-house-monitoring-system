@@ -1,1 +1,6 @@
-ERROR   14.10.2020 12:22:50 ua.polina.smart_house_monitoring_system.controller.AdminController - Device with such name already exits
+INFO    15.10.2020 13:58:32 - admin logged in the system
+INFO    15.10.2020 13:58:37 - admin views all houses in the system
+INFO    15.10.2020 13:58:39 - admin views all rooms in the house: House{id=42, size=96.4, amountOfRooms=5}
+INFO    15.10.2020 13:59:00 - user1 logged in the system
+INFO    15.10.2020 13:59:12 - The device with id: 66 is on
+INFO    15.10.2020 13:59:18 - The device with id: 66 is off

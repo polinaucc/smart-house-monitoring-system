@@ -26,4 +26,14 @@ public class RoomParameterDto {
     @Min(value = 0, message = "min.value.error")
     @Max(value = 100, message = "max.value.error")
     private Double waterLevel;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "temperature=" + temperature +
+                ", humidity=" + humidity +
+                ", smokeLevel=" + smokeLevel +
+                ", waterLevel=" + waterLevel +
+                '}';
+    }
 }

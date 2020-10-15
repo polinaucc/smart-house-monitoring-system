@@ -1,5 +1,7 @@
 package ua.polina.smart_house_monitoring_system.controller;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,7 +24,9 @@ import ua.polina.smart_house_monitoring_system.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * The Resident controller. It process residents' and some owners'
@@ -33,25 +37,34 @@ import java.util.Objects;
 @SessionAttributes(value = {"room", "deviceRoom", "house"})
 public class ResidentController {
     /**
+     * The Logger.
+     */
+    private static final Logger LOGGER = LogManager.getLogger(ResidentController.class);
+    /**
      * The user service.
      */
     private final UserService userService;
-
     /**
      * The room service.
      */
     private final RoomService roomService;
-
     /**
      * The device service.
      */
     private final DeviceService deviceService;
-
     /**
      * The device parameter sevice.
      */
     private final DeviceParameterService deviceParameterService;
-    House house;
+    /**
+     * The current house of the logged in user.
+     */
+    private House house;
+
+    /**
+     * The resource bundle for errors` localization.
+     */
+    private ResourceBundle rb;
 
     /**
      * Instantiates a new Resident controller.
@@ -69,6 +82,8 @@ public class ResidentController {
         this.roomService = roomService;
         this.deviceService = deviceService;
         this.deviceParameterService = deviceParameterService;
+        rb = ResourceBundle.getBundle(
+                "messages", new Locale("en", "UK"));
     }
 
     /**
@@ -96,6 +111,7 @@ public class ResidentController {
             }
             return "rooms";
         } catch (IllegalArgumentException ex) {
+            LOGGER.error(user.getUsername() + rb.getString(ex.getMessage()));
             model.addAttribute("error", ex.getMessage());
             return "index";
         }
@@ -119,10 +135,9 @@ public class ResidentController {
             model.addAttribute("deviceRooms", deviceRoomList);
             return "devices";
         } catch (IllegalArgumentException e) {
-            //TODO: think what user should see if there is no room with such id
+            LOGGER.error(e.getMessage() + " " + roomId);
             return "index";
         }
-
     }
 
     /**
@@ -147,6 +162,7 @@ public class ResidentController {
             model.addAttribute("deviceParameters", deviceParameters);
             return "client/device-parameters";
         } catch (IllegalArgumentException e) {
+            LOGGER.error(e.getMessage() + deviceRoomId);
             model.addAttribute("error", e.getMessage());
             return "client/device-parameters";
         }
@@ -180,12 +196,15 @@ public class ResidentController {
         if (!Objects.requireNonNull(response).getIsSuccess()
                 && response.getHttpStatus() == HttpStatus.OK) {
             //TODO: how to pass this model attribute to the page???? Maybe add to singletone?
+            LOGGER.error("Cannot turn on device with id: " + deviceRoomId);
             model.addAttribute("error", "can.not.on.device");
         } else if (response.getHttpStatus() == HttpStatus.NOT_FOUND) {
+            LOGGER.error("No parameter to on the device with id: " + deviceRoomId);
             model.addAttribute("error", "no.parameter.to.on.device");
+        } else{
+            LOGGER.info("The device with id: " + deviceRoomId + " is on" );
         }
         return "redirect:/resident/my-devices/" + room.getId();
-
     }
 
     /**
@@ -202,6 +221,8 @@ public class ResidentController {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getForObject(
                 uri + deviceRoomId, Boolean.class);
+        LOGGER.info("The device with id: " + deviceRoomId + " is off" );
+        //TODO: add exception catching
         return "redirect:/resident/my-devices/" + room.getId();
     }
 
@@ -229,6 +250,7 @@ public class ResidentController {
             model.addAttribute("setUpParameterDto", new SetUpParameterDto());
             return "/client/set-parameter";
         } catch (IllegalArgumentException e) {
+            LOGGER.error(rb.getString(e.getMessage()));
             model.addAttribute("error", e.getMessage());
             return "redirect:/resident/my-devices/" + room.getId();
         }
@@ -245,7 +267,7 @@ public class ResidentController {
     @PostMapping("/set-up-parameter")
     public String setUpParameterValue(@ModelAttribute("setUpParameterDto")
                                               SetUpParameterDto setUpParameterDto,
-                                      @ModelAttribute("room") Room room,
+                                      @ModelAttribute("room") Room room, @CurrentUser User user,
                                       Model model) {
         final String uri = "http://localhost:8081/sensor/set-up-parameter-value";
         RestTemplate restTemplate = new RestTemplate();
@@ -254,6 +276,8 @@ public class ResidentController {
         if (dp != null) {
             return "redirect:/resident/my-devices/" + room.getId();
         } else {
+            LOGGER.error(user.getUsername() + " There are no parameter with" +
+                    " such id: " + setUpParameterDto.getParameterId());
             model.addAttribute("no.parameter.with.such.id");
             return "/client/set-parameter";
         }
@@ -276,6 +300,7 @@ public class ResidentController {
             model.addAttribute("error", null);
             return "/client/set-up-room-parameters";
         } catch (IllegalArgumentException e) {
+            LOGGER.error(rb.getString(e.getMessage()));
             model.addAttribute("error", e.getMessage());
             return "client/set-up-room-parameters";
         }
@@ -294,7 +319,8 @@ public class ResidentController {
     public String addRoomParameters(@Valid @ModelAttribute("roomParameterDto")
                                             RoomParameterDto roomParameterDto,
                                     @ModelAttribute("room") Room room,
-                                    BindingResult bindingResult, Model model) {
+                                    BindingResult bindingResult, @CurrentUser User user,
+                                    Model model) {
         if (bindingResult.hasErrors()) {
             return "redirect:/resident/set-up-room-parameters/" + room.getId();
         }
@@ -302,6 +328,7 @@ public class ResidentController {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.postForObject(uri, new RoomParametersApi(
                 roomParameterDto, room), String.class);
+        LOGGER.info(user.getUsername() + "added room parameter " + roomParameterDto.toString());
         return "redirect:/resident/my-rooms";
     }
 
@@ -313,10 +340,11 @@ public class ResidentController {
      * @return the redirection to the page with room list.
      */
     @GetMapping("simulate-fire/{room-id}")
-    public String simulateFire(@PathVariable("room-id") Long roomId) {
+    public String simulateFire(@PathVariable("room-id") Long roomId, @CurrentUser User user) {
         final String uri = "http://localhost:8081/sensor/simulate-fire/";
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(uri + roomId, String.class);
+        LOGGER.info(user.getUsername() + " simulates a fire in the room with id: " + roomId);
         return "redirect:/resident/my-rooms";
     }
 
@@ -327,10 +355,11 @@ public class ResidentController {
      * @return the redirection to the page with room list.
      */
     @GetMapping("simulate-flood/{room-id}")
-    public String simulateFlood(@PathVariable("room-id") Long roomId) {
+    public String simulateFlood(@PathVariable("room-id") Long roomId, @CurrentUser User user) {
         final String uri = "http://localhost:8081/sensor/simulate-flood/";
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(uri + roomId, String.class);
+        LOGGER.info(user.getUsername() + " simulates a fire in the room with id: " + roomId);
         return "redirect:/resident/my-rooms";
     }
 
@@ -342,10 +371,11 @@ public class ResidentController {
      * @return the redirection to the page with room list.
      */
     @GetMapping("simulate-open-window/{room-id}")
-    public String simulateOpenWindow(@PathVariable("room-id") Long roomId) {
+    public String simulateOpenWindow(@PathVariable("room-id") Long roomId, @CurrentUser User user) {
         final String uri = "http://localhost:8081/sensor/simulate-open-window/";
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(uri + roomId, String.class);
+        LOGGER.info(user.getUsername() + " simulates an open window in the room with id: " + roomId);
         return "redirect:/resident/my-rooms";
     }
 

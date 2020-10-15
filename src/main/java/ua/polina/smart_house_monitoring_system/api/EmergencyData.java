@@ -39,11 +39,9 @@ public class EmergencyData {
         }
         instance.messageList = messages;
         if (messages != null && messages.messages != null) {
-            for (String mes : messages.messages
-            ) {
-                LOGGER.warn(SecurityContextHolder.getContext()
-                        .getAuthentication().getName() + " " + mes);
-            }
+            messages.messages.forEach(mes ->
+                    LOGGER.warn(SecurityContextHolder.getContext()
+                            .getAuthentication().getName() + " " + mes));
         }
         return instance;
     }

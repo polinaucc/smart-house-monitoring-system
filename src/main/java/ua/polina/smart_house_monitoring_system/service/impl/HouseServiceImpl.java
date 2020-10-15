@@ -96,10 +96,8 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public House updateSize(House house, List<Room> roomsInHouse) {
         house.setSize(0.0);
-        for (Room r : roomsInHouse) {
-            house.setSize(DoubleRounder.round(
-                    house.getSize() + r.getSize(), 2));
-        }
+        roomsInHouse.forEach(r -> house.setSize(DoubleRounder.round(
+                house.getSize() + r.getSize(), 2)));
         return houseRepository.save(house);
     }
 

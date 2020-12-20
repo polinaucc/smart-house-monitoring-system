@@ -12,7 +12,6 @@ import ua.polina.smart_house_monitoring_system.dto.HouseDto;
 import ua.polina.smart_house_monitoring_system.entity.Address;
 import ua.polina.smart_house_monitoring_system.entity.House;
 import ua.polina.smart_house_monitoring_system.entity.Room;
-import ua.polina.smart_house_monitoring_system.repository.AddressRepository;
 import ua.polina.smart_house_monitoring_system.repository.HouseRepository;
 import ua.polina.smart_house_monitoring_system.service.impl.HouseServiceImpl;
 
@@ -20,20 +19,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HouseServiceImplTest {
+    private static final Long DEFAULT_ID = 1L;
+
     @Mock
-    AddressRepository addressRepository;
+    private AddressService addressService;
     @Mock
-    HouseRepository houseRepository;
+    private HouseRepository houseRepository;
     @InjectMocks
-    HouseServiceImpl houseService;
-    HouseDto houseDto;
-    House house;
-    List<Room> rooms;
+    private HouseServiceImpl houseService;
+    private HouseDto houseDto;
+    private House house;
+    private List<Room> rooms;
 
     @Before
     public void setUp() throws Exception {
@@ -54,13 +54,13 @@ public class HouseServiceImplTest {
                 .build();
 
         house = House.builder()
-                .id(1L)
+                .id(DEFAULT_ID)
                 .address(address)
                 .amountOfRooms(3)
                 .build();
 
         Room room1 = Room.builder()
-                .id(1L)
+                .id(DEFAULT_ID)
                 .name("Гостинная")
                 .size(10.5)
                 .build();
@@ -78,8 +78,11 @@ public class HouseServiceImplTest {
     @Test
     public void addNewHouse() {
         houseService.addNewHouse(houseDto);
-        verify(addressRepository, times(1)).save(any(Address.class));
-        verify(houseRepository, times(1)).save(any(House.class));
+        verify(addressService, times(1)).saveAddress(eq(houseDto));
+        House expectedHouse = House.builder()
+                .amountOfRooms(3)
+                .build();
+        verify(houseRepository, times(1)).save(eq(expectedHouse));
     }
 
     @Test
@@ -91,9 +94,23 @@ public class HouseServiceImplTest {
     }
 
     @Test
+    public void getAllHouses() {
+        houseService.getAllHouses();
+        verify(houseRepository, times(1)).findAll();
+    }
+
+    @Test
     public void updateSize() {
         houseService.updateSize(house, rooms);
-        verify(houseRepository, times(1)).save(any(House.class));
+        verify(houseRepository, times(1)).save(eq(house));
     }
+
+    @Test
+    public void getHouseByAddressId() {
+        when(houseRepository.findByAddress_Id(eq(DEFAULT_ID))).thenReturn(Optional.of(house));
+        House actualHouse = houseService.getHouseByAddressId(DEFAULT_ID);
+        Assert.assertEquals(actualHouse, house);
+    }
+
 
 }

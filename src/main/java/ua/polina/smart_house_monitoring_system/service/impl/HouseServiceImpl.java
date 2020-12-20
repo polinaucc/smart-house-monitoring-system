@@ -60,7 +60,6 @@ public class HouseServiceImpl implements HouseService {
         return houseRepository.save(house);
     }
 
-
     /**
      * Gets all houses in the database.
      *

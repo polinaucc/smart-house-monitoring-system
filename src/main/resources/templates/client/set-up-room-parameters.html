@@ -9,7 +9,8 @@
 </head>
 <body>
 <div class="container">
-    <form class="form-signin" th:action="@{/resident/set-up-room-parameters}" th:object="${roomParametersDto}" method="post">
+    <form class="form-signin" th:action="@{/resident/set-up-room-parameters}" th:object="${roomParametersDto}"
+          method="post">
         <div>
             <th:block th:insert="fragments/language :: language"/>
         </div>
@@ -17,9 +18,12 @@
         <div th:if="${error != null}">
             <p th:text="#{${error}}">...</p>
         </div>
-        <div class="error" th:if="${#fields.hasErrors('temperature')}" th:errors="*{temperature}">Temperature adding Error</div>
+        <div class="error" th:if="${#fields.hasErrors('temperature')}" th:errors="*{temperature}">Temperature adding
+            Error
+        </div>
         <div>
-            <input class="form-control" type="text" th:placeholder="#{placeholder.temperature}" required="" id="temperature"
+            <input class="form-control" type="text" th:placeholder="#{placeholder.temperature}" required=""
+                   id="temperature"
                    th:field="*{temperature}"/>
         </div>
         <div class="error" th:if="${#fields.hasErrors('humidity')}" th:errors="*{humidity}">Humidity adding Error</div>
@@ -27,18 +31,26 @@
             <input class="form-control" type="text" th:placeholder="#{placeholder.humidity}" required="" id="humidity"
                    th:field="*{humidity}"/>
         </div>
-        <div class="error" th:if="${#fields.hasErrors('smokeLevel')}" th:errors="*{smokeLevel}">Smoke level adding Error</div>
+        <div class="error" th:if="${#fields.hasErrors('smokeLevel')}" th:errors="*{smokeLevel}">Smoke level adding
+            Error
+        </div>
         <div>
-            <input class="form-control" type="text" th:placeholder="#{placeholder.smoke.level}" required="" id="smokeLevel"
+            <input class="form-control" type="text" th:placeholder="#{placeholder.smoke.level}" required=""
+                   id="smokeLevel"
                    th:field="*{smokeLevel}"/>
         </div>
-        <div class="error" th:if="${#fields.hasErrors('waterLevel')}" th:errors="*{waterLevel}">Water level adding Error</div>
+        <div class="error" th:if="${#fields.hasErrors('waterLevel')}" th:errors="*{waterLevel}">Water level adding
+            Error
+        </div>
         <div>
-            <input class="form-control" type="text" th:placeholder="#{placeholder.water.level}" required="" id="waterLevel"
+            <input class="form-control" type="text" th:placeholder="#{placeholder.water.level}" required=""
+                   id="waterLevel"
                    th:field="*{waterLevel}"/>
         </div>
         <div>
-            <button class="btn btn-lg btn-primary btn-block" th:text="#{add.device}" type="submit">Add device</button>
+            <button class="btn btn-lg btn-primary btn-block" th:text="#{add.room.parameter}" type="submit">Add room
+                parameter
+            </button>
         </div>
     </form>
 </div>

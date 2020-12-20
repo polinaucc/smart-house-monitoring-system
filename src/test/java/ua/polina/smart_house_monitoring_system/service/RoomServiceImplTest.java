@@ -16,18 +16,22 @@ import ua.polina.smart_house_monitoring_system.service.impl.RoomServiceImpl;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RoomServiceImplTest {
+    private static final Long DEFAULT_ID = 1L;
+
     @Mock
-    RoomRepository roomRepository;
+    private RoomRepository roomRepository;
     @InjectMocks
-    RoomServiceImpl roomService;
-    House house;
-    List<Room> rooms;
-    RoomDto roomDto;
+    private RoomServiceImpl roomService;
+    private House house;
+    private List<Room> rooms;
+    private RoomDto roomDto;
+    private Room room1;
 
     @Before
     public void setUp() throws Exception {
@@ -39,7 +43,7 @@ public class RoomServiceImplTest {
                 .build();
 
         house = House.builder()
-                .id(1L)
+                .id(DEFAULT_ID)
                 .address(address)
                 .amountOfRooms(3)
                 .build();
@@ -49,8 +53,8 @@ public class RoomServiceImplTest {
                 .roomSize(10.5)
                 .build();
 
-        Room room1 = Room.builder()
-                .id(1L)
+        room1 = Room.builder()
+                .id(DEFAULT_ID)
                 .name("Гостинная")
                 .size(10.5)
                 .house(house)
@@ -78,5 +82,31 @@ public class RoomServiceImplTest {
     public void saveRoom() {
         roomService.saveRoom(roomDto, house);
         verify(roomRepository, times(1)).save(any(Room.class));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void saveRoomWithException() {
+        when(roomRepository.countRoomsByHouse(eq(house))).thenReturn(3);
+        roomService.saveRoom(roomDto, house);
+    }
+
+    @Test
+    public void deleteById() {
+        when(roomRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(room1));
+        roomService.deleteById(DEFAULT_ID);
+        verify(roomRepository, times(1)).deleteById(DEFAULT_ID);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void deleteByIdWithException() {
+        when(roomRepository.findById(DEFAULT_ID)).thenReturn(Optional.empty());
+        roomService.deleteById(DEFAULT_ID);
+    }
+
+    @Test
+    public void getById() {
+        when(roomRepository.findById(DEFAULT_ID)).thenReturn(Optional.of(room1));
+        Room actualRoom = roomService.getById(DEFAULT_ID);
+        Assert.assertEquals(room1, actualRoom);
     }
 }

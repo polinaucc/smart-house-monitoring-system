@@ -74,7 +74,6 @@ public class RoomServiceImpl implements RoomService {
         if (roomRepository.findById(roomId).isPresent()) {
             roomRepository.deleteById(roomId);
         } else throw new IllegalArgumentException("resource.not.exists");
-
     }
 
     /**
